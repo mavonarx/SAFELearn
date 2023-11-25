@@ -9,6 +9,7 @@
 #include "../mpcutils/MPCCircuit.h"
 #include "../mpcutils/MPCParty.h"
 #include "Aggregator.cpp"
+#include "MPCAggregator.h"
 
 using namespace std;
 
@@ -42,13 +43,14 @@ NUMBER_TYPE *create_tmp_update_storage(uint32_t number_of_entries)
     return new NUMBER_TYPE[number_of_entries];
 }
 
-OUTPUT_NUMBER_TYPE *aggregate_models(e_role role, const string &address, uint16_t port, seclvl seclvl,
+// TODO REFACTOR DUPLICATED CODE
+OUTPUT_NUMBER_TYPE *init_aggregation_weighted(e_role role, const string &address, uint16_t port, seclvl seclvl,
                                      e_mt_gen_alg mt_alg, NUMBER_TYPE *global_model,
                                      vector<NUMBER_TYPE *> *local_models,
-                                     uint32_t number_of_entries, NUMBER_TYPE *q_vals)
+                                     uint32_t number_of_entries, NUMBER_TYPE *weights)
 {
 
-    cout << get_time_as_string() << "Good Morning (bitlen=" << BIT_LENGTH << ")" << endl;
+    cout << get_time_as_string() << "Good Morning (bitlen=" << BIT_LENGTH << ")" << endl; 
     MPCParty party = make_unique<MPCParty_>(role, address, port, seclvl, BIT_LENGTH, N_THREADS,
                                             mt_alg);
 
@@ -57,8 +59,8 @@ OUTPUT_NUMBER_TYPE *aggregate_models(e_role role, const string &address, uint16_
 
     seed_random_generator();
 
-    vector<ArithmeticShare> clipped_updates;
-    clipped_updates.reserve(local_models->size());
+    vector<ArithmeticShare> deltas_share_vec;
+    deltas_share_vec.reserve(local_models->size());
 
     NUMBER_TYPE *tmp_update_storage = create_tmp_update_storage(number_of_entries);
     for (auto &local_model : *local_models)
@@ -66,20 +68,107 @@ OUTPUT_NUMBER_TYPE *aggregate_models(e_role role, const string &address, uint16_
 
         ArithmeticShare update = create_typed_update_share(BIT_LENGTH, role, arithmetic_circuit, global_model,
                                                            local_model, number_of_entries, tmp_update_storage);
-        clipped_updates.push_back(update);
+        deltas_share_vec.push_back(update);
     }
     delete[] tmp_update_storage;
 
-    auto *q_vals_vecs = new ArithmeticShare[number_of_entries];
+    ArithmeticShare global_model_share = arithmetic_circuit->PutSIMDINGate(number_of_entries, global_model, BIT_LENGTH, SERVER);
 
+    auto *weights_vecs = new ArithmeticShare[number_of_entries];
     for (uint32_t i = 0; i < local_models->size(); i++){
-        q_vals_vecs[i] = arithmetic_circuit->PutSIMDCONSGate(number_of_entries, q_vals[i], BIT_LENGTH);
+        weights_vecs[i] = arithmetic_circuit->PutSIMDCONSGate(number_of_entries, weights[i], BIT_LENGTH);
+    }
+    OUTPUT_NUMBER_TYPE *aggregated_update = aggregate_models_weighted(party, BIT_LENGTH, number_of_entries, &deltas_share_vec,
+                                                             arithmetic_circuit, yao_circuit, global_model_share, weights_vecs);
+
+    auto plain_text_aggregated_update_shares = new vector<tuple<int32_t, OUTPUT_NUMBER_TYPE *>>();
+    vector<size_t> client_numbers;
+    client_numbers.reserve(plain_text_aggregated_update_shares->size());
+    return aggregated_update;
+}
+
+// TODO REFACTOR DUPLICATED CODE
+OUTPUT_NUMBER_TYPE *init_aggregation_normal_avg(e_role role, const string &address, uint16_t port, seclvl seclvl,
+                                     e_mt_gen_alg mt_alg, NUMBER_TYPE *global_model,
+                                     vector<NUMBER_TYPE *> *local_models,
+                                     uint32_t number_of_entries)
+{
+
+    cout << get_time_as_string() << "Good Morning (bitlen=" << BIT_LENGTH << ")" << endl; 
+    MPCParty party = make_unique<MPCParty_>(role, address, port, seclvl, BIT_LENGTH, N_THREADS,
+                                            mt_alg);
+
+    TypedYaoCircuit yao_circuit = party->get_yao_circuit();
+    TypedArithmeticCircuit arithmetic_circuit = party->get_arithmetic_circuit();
+
+    seed_random_generator();
+
+    vector<ArithmeticShare> deltas_share_vec;
+    deltas_share_vec.reserve(local_models->size());
+
+    NUMBER_TYPE *tmp_update_storage = create_tmp_update_storage(number_of_entries);
+    for (auto &local_model : *local_models)
+    {
+        ArithmeticShare update = create_typed_update_share(BIT_LENGTH, role, arithmetic_circuit, global_model,
+                                                           local_model, number_of_entries, tmp_update_storage);
+        deltas_share_vec.push_back(update);
+    }
+    delete[] tmp_update_storage;
+
+    ArithmeticShare global_model_share = arithmetic_circuit->PutSIMDINGate(number_of_entries, global_model, BIT_LENGTH, SERVER);
+    OUTPUT_NUMBER_TYPE *aggregated_update = aggregate_models_normal_avg(party, BIT_LENGTH, number_of_entries, &deltas_share_vec,
+                                                             arithmetic_circuit, yao_circuit, global_model_share);
+
+    auto plain_text_aggregated_update_shares = new vector<tuple<int32_t, OUTPUT_NUMBER_TYPE *>>();
+    vector<size_t> client_numbers;
+    client_numbers.reserve(plain_text_aggregated_update_shares->size());
+    return aggregated_update;
+}
+
+
+
+
+
+
+OUTPUT_NUMBER_TYPE *init_aggregation_q_fed(e_role role, const std::string &address, uint16_t port, seclvl seclvl,
+                                     e_mt_gen_alg mt_alg, NUMBER_TYPE *global_model,
+                                     vector<NUMBER_TYPE *> *deltas, vector<NUMBER_TYPE *> *h_values, uint32_t number_of_entries){
+    cout << get_time_as_string() << "Good Morning (bitlen=" << BIT_LENGTH << ")" << endl; 
+    MPCParty party = make_unique<MPCParty_>(role, address, port, seclvl, BIT_LENGTH, N_THREADS,
+                                            mt_alg);
+
+    TypedYaoCircuit yao_circuit = party->get_yao_circuit();
+    TypedArithmeticCircuit arithmetic_circuit = party->get_arithmetic_circuit();
+
+    seed_random_generator();
+
+    vector<ArithmeticShare> deltas_share_vec;
+    deltas_share_vec.reserve(deltas->size());
+    vector<ArithmeticShare> h_share_vec;
+    h_share_vec.reserve(h_values->size());
+
+    //NUMBER_TYPE *tmp_update_storage = create_tmp_update_storage(number_of_entries);
+
+
+    for (auto &delta : *deltas)
+    {
+        ArithmeticShare update = arithmetic_circuit->PutSharedSIMDINGate(number_of_entries, delta, BIT_LENGTH);
+        
+        //create_typed_update_share(BIT_LENGTH, role, arithmetic_circuit, global_model,
+        //                                                   local_model, number_of_entries, tmp_update_storage);
+        deltas_share_vec.push_back(update);
+    }
+    //delete[] tmp_update_storage;
+
+    for (auto &h : *h_values)
+    {
+        ArithmeticShare update = arithmetic_circuit->PutSharedSIMDINGate(number_of_entries, h, BIT_LENGTH);
+        h_share_vec.push_back(update);
     }
 
     ArithmeticShare global_model_share = arithmetic_circuit->PutSIMDINGate(number_of_entries, global_model, BIT_LENGTH, SERVER);
-
-    OUTPUT_NUMBER_TYPE *aggregated_update = aggregate_models(party, BIT_LENGTH, number_of_entries, &clipped_updates,
-                                                             arithmetic_circuit, yao_circuit, global_model_share, q_vals_vecs);
+    OUTPUT_NUMBER_TYPE *aggregated_update = aggregate_models_q_fed(party, BIT_LENGTH, number_of_entries, &deltas_share_vec, &h_share_vec,
+                                                             arithmetic_circuit, yao_circuit, global_model_share);
 
     auto plain_text_aggregated_update_shares = new vector<tuple<int32_t, OUTPUT_NUMBER_TYPE *>>();
     vector<size_t> client_numbers;
