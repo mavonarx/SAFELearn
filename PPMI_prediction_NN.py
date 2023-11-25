@@ -148,7 +148,7 @@ for client_index, split_data in enumerate(clients):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-            print(f'Client {client_index}, Epoch {epoch}, latest loss {loss}')
+            #print(f'Client {client_index}, Epoch {epoch}, latest loss {loss}')
         torch.save(model.state_dict(), f"{MODEL_PATH}Model_{client_index}.txt")
         #torch.save(loss_fn(y_pred, torch.reshape(y_train, (-1,)).to(torch.int64)), f"model/PPMImodels/Loss_{client_index}"
     ## execute the code    
