@@ -14,7 +14,7 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 ###############################################################################
 LIPSCHITZCONSTANT = 1
 Q_FACTOR = 0
-TORCHSEED = sys.argv[1]
+TORCHSEED = int(sys.argv[1])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
 PROJECT = "PPMI"
