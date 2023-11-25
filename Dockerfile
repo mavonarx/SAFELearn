@@ -24,9 +24,7 @@ RUN mkdir -p build && cd build && cmake .. && make && make install
 
 # Adjust variables in CMakeLists.txt and build SAFELearn
 WORKDIR /SAFELearn
-RUN sed -i 's|ABSOLUTE_PATH_TO_ABY|/ABY/build|g' ./CMakeLists.txt \
-    && sed -i 's|/include|/extern/ENCRYPTO_utils/include|g' ./CMakeLists.txt \
-    && mkdir -p build && mkdir -p model && cd build && cmake .. && make
+RUN mkdir -p build && mkdir -p model && cd build && cmake .. && make
 
 # Get pip and use it for installing Python modules
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py && rm get-pip.py

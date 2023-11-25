@@ -3,7 +3,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 cmake_minimum_required(VERSION 3.13)
 project(SafeLearn LANGUAGES CXX)
 
-set(ABY_PATH "ABSOLUTE_PATH_TO_ABY")
+set(ABY_PATH "/ABY/build")
 
 
 find_package(GMP REQUIRED)
@@ -19,7 +19,7 @@ set(ABY_LIBRARIES "${ABY_LIB_PATH}/libaby.a" "${ABY_LIB_PATH}/libencrypto_utils.
 set(COMPILE_OPTIONS PUBLIC -Wall -Wextra -g3 -std=c++17)
 
 add_executable(fedavg_aggregation FedAvgModelAggregation.cpp ${NonMainCPPFiles})
-include_directories(fedavg_aggregation "${ABY_PATH}/include")
+include_directories(fedavg_aggregation "${ABY_PATH}/extern/ENCRYPTO_utils/include")
 target_link_libraries(fedavg_aggregation ${ABY_LIBRARIES})
 target_link_libraries(fedavg_aggregation ${NON_ABY_LIBRARIES})
 target_compile_options(fedavg_aggregation ${COMPILE_OPTIONS})
