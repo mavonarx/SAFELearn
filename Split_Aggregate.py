@@ -107,7 +107,6 @@ def create_splits(global_model_path, local_model_paths, q=False):
             restricted_local_vec = restrict_values(vec) 
 
            
-        print("restrticted ", restricted_local_vec)
         a, b = split(restricted_local_vec)
         a_file = f'{SPLITTED_FILE_DIR}/A_C{i:03d}.txt'
         b_file = f'{SPLITTED_FILE_DIR}/B_C{i:03d}.txt'
