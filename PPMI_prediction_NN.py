@@ -14,7 +14,7 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 ###############################################################################
 LIPSCHITZCONSTANT = 1
 Q_FACTOR = 0
-TORCHSEED = 42
+TORCHSEED = sys.argv[1]
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
 PROJECT = "PPMI"
@@ -39,7 +39,7 @@ if not os.path.exists("model"):
 if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
-if (len(sys.argv) == 3):
+if (len(sys.argv) == 4):
     print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
     exit()
 
@@ -154,7 +154,7 @@ for client_index, split_data in enumerate(clients):
         #torch.save(loss_fn(y_pred, torch.reshape(y_train, (-1,)).to(torch.int64)), f"model/PPMImodels/Loss_{client_index}"
     ## execute the code    
 
-    if (len(sys.argv) == 1):
+    if (len(sys.argv) == 2):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
     eval_model(model, X_test, y_test, client_index)
         
@@ -187,7 +187,7 @@ def calculate_delta(q, loss, deltawt):
 def calculate_ht(q, loss, deltawt, L):
     return q * loss ** (q-1) * np.linalg.norm(deltawt.detach().numpy(),2) ** 2 + loss ** q * L
 
-if (len(sys.argv) == 1):
+if (len(sys.argv) == 2):
 
     for client_index in range(len(clients)):
         model = PPMIModel()

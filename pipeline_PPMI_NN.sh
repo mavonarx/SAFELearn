@@ -2,13 +2,13 @@
 
 rm results.txt
 rm model/PPMI/GlobalModel.txt
-python PPMI_prediction_NN.py blabla bla >> results.txt
+python PPMI_prediction_NN.py blabla bla blabla >> results.txt
 
 for i in $(seq 1 5);
 do
 
     echo $i >> results.txt
-    python PPMI_prediction_NN.py
+    python PPMI_prediction_NN.py $i
     
     echo q | python Split_Aggregate.py
     cd build
@@ -17,6 +17,6 @@ do
     cd ..
     echo c | python Split_Aggregate.py
 
-    python PPMI_prediction_NN.py blabla >> results.txt
+    python PPMI_prediction_NN.py $i >> results.txt
 
 done
