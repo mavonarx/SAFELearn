@@ -12,6 +12,8 @@ do
     cd ..
     echo c | python Split_Aggregate.py
 
-    python PPMI_prediction_NN.py blabla
+    python PPMI_prediction_NN.py blabla >> results.txt
+
+    echo "\n" >> results.txt
     echo $i
 done
