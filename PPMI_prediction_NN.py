@@ -41,6 +41,7 @@ if not os.path.exists(MODEL_PATH):
 ###############################################################################
 if (len(sys.argv) == 3):
     print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
+    exit()
 
 fullset = pd.read_csv(INPUT_DATA_PATH)
 fullset = torch.Tensor(fullset.to_numpy())
