@@ -2,7 +2,7 @@
 
 rm results.txt
 rm model/PPMI/GlobalModel.txt
-python PPMI_prediction_NN.py blabla bla blabla >> results.txt
+python PPMI_prediction_NN.py 5 bla blabla >> results.txt
 
 for i in $(seq 1 5);
 do
