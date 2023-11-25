@@ -21,6 +21,8 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
+N_EPOCHS = 50
+BATCH_SIZE = 64
 ###############################################################################
 
 # INIT
@@ -29,7 +31,7 @@ torch.manual_seed(TORCHSEED)
 generator = torch.Generator().manual_seed(TORCHSEED)
 
 device = torch.device(DEFAULT_DEVICE)
-print("Device:", device)
+#print("Device:", device)
 
 if not os.path.exists("model"):
         os.mkdir("model")
@@ -37,7 +39,8 @@ if not os.path.exists("model"):
 if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
-
+if (len(sys.argv) == 1):
+    print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
 
 fullset = pd.read_csv(INPUT_DATA_PATH)
 fullset = torch.Tensor(fullset.to_numpy())
@@ -54,8 +57,7 @@ for client_index in range(NUMBER_OF_CLIENTS):
 
 client_loss = np.zeros(NUMBER_OF_CLIENTS) 
 
-n_epochs = 50
-batch_size = 64
+
 
 class PPMIModel(nn.Module):
     def __init__(self):
@@ -89,8 +91,9 @@ def eval_model(model, X_test, y_test, client_index):
         y_pred = model(X_test)
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
         #y_pred_integer = y_pred.round().cpu().numpy()
-        print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3))
-        print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3))
+
+        print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3), ",")
+        print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3), ",")
 
 
 # if the global model does not yet exist create a new fully untrained one
@@ -137,9 +140,9 @@ for client_index, split_data in enumerate(clients):
         model.to(device)
                     
         for epoch in range(n_epochs):
-            for i in range(0, len(X_train), batch_size):
-                Xbatch = X_train[i:i+batch_size].to(device)
-                ybatch = y_train[i:i+batch_size].to(device)
+            for i in range(0, len(X_train), BATCH_SIZE):
+                Xbatch = X_train[i:i+BATCH_SIZE].to(device)
+                ybatch = y_train[i:i+BATCH_SIZE].to(device)
                 y_pred = model(Xbatch)
                 loss = loss_fn(y_pred, torch.reshape(ybatch, (-1,)).to(torch.int64))
                 optimizer.zero_grad()
@@ -151,7 +154,7 @@ for client_index, split_data in enumerate(clients):
     ## execute the code    
 
     if (len(sys.argv) == 1):
-        train_model(model, optimizer, X_train, y_train, loss_fn, n_epochs)
+        train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
     eval_model(model, X_test, y_test, client_index)
         
 

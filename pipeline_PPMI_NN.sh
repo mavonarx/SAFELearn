@@ -1,8 +1,7 @@
 #!/bin/bash
 
-for i in $(seq 1 2);
+for i in $(seq 1 5);
 do
-    echo $i
     python PPMI_prediction_NN.py
     
     echo q | python Split_Aggregate.py
@@ -14,6 +13,5 @@ do
 
     python PPMI_prediction_NN.py blabla >> results.txt
 
-    echo "\n" >> results.txt
-    echo $i
+    echo $i >> results.txt
 done
