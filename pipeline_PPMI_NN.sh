@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm results.txt
 rm model/PPMI/GlobalModel.txt
 python PPMI_prediction_NN.py blabla bla >> results.txt
 
