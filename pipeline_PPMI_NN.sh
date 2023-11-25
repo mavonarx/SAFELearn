@@ -13,4 +13,4 @@ do
 
     python PPMI_prediction_NN.py blabla
     echo $i
-done;
+done
