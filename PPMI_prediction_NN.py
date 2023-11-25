@@ -52,8 +52,8 @@ fullset = torch.Tensor(fullset.to_numpy())
 set_size = len(fullset)
 clients = []
 
-evalset = fullset[ : len(fullset)*0.1]
-fullset = fullset[len(fullset)*0.1:]
+evalset = fullset[ : int(len(fullset)*0.1)]
+fullset = fullset[int(len(fullset)*0.1):]
     
 
 
