@@ -92,8 +92,8 @@ def eval_model(model, X_test, y_test, client_index):
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
         #y_pred_integer = y_pred.round().cpu().numpy()
 
-        print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3), ",")
-        print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3), ",")
+        print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
+        print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
 
 
 # if the global model does not yet exist create a new fully untrained one
