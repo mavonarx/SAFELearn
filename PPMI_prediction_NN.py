@@ -12,9 +12,10 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 
 # Change constants here
 ###############################################################################
+MODE = int(sys.argv[1]) # 0 is training mode, 1 is eval mode, 2 is print params mode
 LIPSCHITZCONSTANT = 1
 Q_FACTOR = 0
-TORCHSEED = int(sys.argv[1])
+TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
 PROJECT = "PPMI"
@@ -39,15 +40,21 @@ if not os.path.exists("model"):
 if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
-if (len(sys.argv) == 4):
+if (MODE == 2):
     print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
     exit()
+
+
 
 fullset = pd.read_csv(INPUT_DATA_PATH)
 fullset = torch.Tensor(fullset.to_numpy())
 
 set_size = len(fullset)
 clients = []
+
+evalset = fullset[ : len(fullset)*0.1]
+fullset = fullset[len(fullset)*0.1:]
+    
 
 
 # Split the data into non-overlapping parts
@@ -83,6 +90,26 @@ class PPMIModel(nn.Module):
         x = self.act_fn(x)
         x = self.linear5(x)
         return x
+    
+    
+
+
+if (MODE == 1):
+    model = PPMIModel()
+    # if there exists a global model from earlier learnings import it
+    model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
+    loss_fn = nn.CrossEntropyLoss()
+    
+    X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
+    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
+    
+    y_pred_eval = model(X_eval)
+    
+    print(multiclass_f1_score(y_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_auroc(y_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    exit()
+
+
 
 def eval_model(model, X_test, y_test, client_index):
     model.eval()
@@ -95,6 +122,9 @@ def eval_model(model, X_test, y_test, client_index):
 
         print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
         print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
+
+
+
 
 
 # if the global model does not yet exist create a new fully untrained one
@@ -154,7 +184,7 @@ for client_index, split_data in enumerate(clients):
         #torch.save(loss_fn(y_pred, torch.reshape(y_train, (-1,)).to(torch.int64)), f"model/PPMImodels/Loss_{client_index}"
     ## execute the code    
 
-    if (len(sys.argv) == 2):
+    if (MODE == 0):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
     eval_model(model, X_test, y_test, client_index)
         
@@ -187,7 +217,7 @@ def calculate_delta(q, loss, deltawt):
 def calculate_ht(q, loss, deltawt, L):
     return q * loss ** (q-1) * np.linalg.norm(deltawt.detach().numpy(),2) ** 2 + loss ** q * L
 
-if (len(sys.argv) == 2):
+if (MODE == 0):
 
     for client_index in range(len(clients)):
         model = PPMIModel()
@@ -199,3 +229,5 @@ if (len(sys.argv) == 2):
         np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
         #f.write(delta.numpy() + "\n" + ht.numpy())
         #f.close()
+        
+        
