@@ -1,6 +1,7 @@
 #!/bin/bash
 
-for i in{0..5};do
+for i in{0..5}
+do
     python PPMI_prediction_NN.py
     
     echo q | python Split_Aggregate.py
