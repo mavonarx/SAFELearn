@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm model/PPMI/GlobalModel.txt
 python PPMI_prediction_NN.py blabla bla >> results.txt
 
 for i in $(seq 1 5);
@@ -16,4 +17,5 @@ do
     python PPMI_prediction_NN.py blabla >> results.txt
 
     echo $i >> results.txt
+
 done
