@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in{0..5}
+for i $(seq 1 10);
 do
     python PPMI_prediction_NN.py
     
