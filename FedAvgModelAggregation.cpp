@@ -36,8 +36,7 @@ int32_t read_test_options(int32_t *argcp, char ***argvp, e_role *role,
          {(void *)address, T_STR, "a", "IP-address, default: localhost", false, false},
          {(void *)dataset, T_STR, "d", "dataset name", false, false},
          {(void *)&int_port, T_NUM, "p", "Port, default: 7766", false, false},
-         {(void *)mode, T_NUM, "q", "Modes are 0, 1, 2", false, false}
-         };
+         {(void *)mode, T_NUM, "q", "Modes are 0, 1, 2", false, false}};
 
     if (!parse_options(argcp, argvp, options,
                        sizeof(options) / sizeof(parsing_ctx)))
@@ -72,26 +71,28 @@ int main(int argc, char **argv)
     string dataset = "TestData";
     size_t n = 100;
     size_t real_parameters = -1;
-    uint8_t mode = 0; // 0 = fed-average, 1 = weighted, 2 = q-fed-average
+    uint8_t mode = 2; // 0 = fed-average, 1 = weighted, 2 = q-fed-average
 
     read_test_options(&argc, &argv, &mpc_role, &bitlen, &secparam, &address, &port, &dataset, &n, &real_parameters, &mode);
 
     seclvl seclvl = get_sec_lvl(secparam);
 
     ROLE_TYPE role = mpc_role ? CLIENT_KEY : SERVER_KEY;
-    cout << get_time_as_string() << "This is Aggregator " << role << " and mode "<< mode <<endl;
+    cout << get_time_as_string() << "This is Aggregator " << role << " and mode " << mode << endl;
     cout << "(Is server: " << (mpc_role == SERVER) << ")" << endl;
     string directory = DATA_DIR + dataset + "Splits/";
 
     uint32_t entries_per_model;
-    vector<NUMBER_TYPE*> *models_of_client;
-    vector<NUMBER_TYPE*> *h_values;
-    if (mode == 0 || mode == 1){
+    vector<NUMBER_TYPE *> *models_of_client;
+    vector<NUMBER_TYPE *> *h_values;
+    if (mode == 0 || mode == 1)
+    {
         tuple<uint32_t, vector<NUMBER_TYPE *> *> tmp = read_local_models(directory, role, n);
         entries_per_model = get<0>(tmp);
         models_of_client = get<1>(tmp);
     }
-    if (mode == 2){
+    if (mode == 2)
+    {
         tuple<uint32_t, tuple<vector<NUMBER_TYPE *> *, vector<NUMBER_TYPE *> *>> tmp = read_q_fed_avg_data(directory, role, n);
         entries_per_model = get<0>(tmp);
         models_of_client = get<0>(get<1>(tmp));
@@ -103,8 +104,9 @@ int main(int argc, char **argv)
     assert(models_of_client->size() <= n);
     NUMBER_TYPE *global_model = read_global_model(directory, entries_per_model);
     NUMBER_TYPE *weights;
-    if (mode == 1){
-        weights = read_weights(directory, models_of_client->size());       //for weighted average
+    if (mode == 1)
+    {
+        weights = read_weights(directory, models_of_client->size()); // for weighted average
     }
 
     if (real_parameters <= 0)
@@ -114,20 +116,23 @@ int main(int argc, char **argv)
              << ")" << endl;
         entries_per_model = real_parameters;
     }
-    
+
     OUTPUT_NUMBER_TYPE *aggregated_model;
 
-    if (mode == 1){
+    if (mode == 1)
+    {
         aggregated_model = init_aggregation_weighted(mpc_role, address, port, seclvl, mt_alg, global_model,
-                                                            models_of_client, entries_per_model, weights);
+                                                     models_of_client, entries_per_model, weights);
     }
-    if (mode == 0){
+    if (mode == 0)
+    {
         aggregated_model = init_aggregation_normal_avg(mpc_role, address, port, seclvl, mt_alg, global_model,
-                                                            models_of_client, entries_per_model);
+                                                       models_of_client, entries_per_model);
     }
-    if (mode == 2){
+    if (mode == 2)
+    {
         aggregated_model = init_aggregation_q_fed(mpc_role, address, port, seclvl, mt_alg, global_model,
-                                                          models_of_client,h_values,  entries_per_model);
+                                                  models_of_client, h_values, entries_per_model);
     }
     cout << get_time_as_string() << "Aggregation Component is Done" << endl;
 
