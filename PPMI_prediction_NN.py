@@ -100,13 +100,13 @@ if (MODE == 1):
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
     loss_fn = nn.CrossEntropyLoss()
     
-    X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
+    X_eval = torch.tensor(evalset[:, 2:], dtype=torch.float32)
+    y_eval = torch.tensor(evalset[:, 1], dtype=torch.float32).reshape(-1, 1)
     
     y_pred_eval = model(X_eval)
     
-    print(multiclass_f1_score(y_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    print(multiclass_auroc(y_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     exit()
 
 
