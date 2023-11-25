@@ -2,7 +2,7 @@
 
 for i in $(seq 1 5);
 do
-    python PPMI_prediction_NN.py >> results.txt
+    python PPMI_prediction_NN.py
     
     echo q | python Split_Aggregate.py
     cd build

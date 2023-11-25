@@ -39,7 +39,7 @@ if not os.path.exists("model"):
 if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
-if (len(sys.argv) == 1):
+if (len(sys.argv) == 2):
     print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
 
 fullset = pd.read_csv(INPUT_DATA_PATH)
