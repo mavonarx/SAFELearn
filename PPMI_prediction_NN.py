@@ -31,6 +31,8 @@ BATCH_SIZE = 64
 torch.manual_seed(TORCHSEED)
 generator = torch.Generator().manual_seed(TORCHSEED)
 
+eval_generator = torch.Generator().manual_seed(42)
+
 device = torch.device(DEFAULT_DEVICE)
 #print("Device:", device)
 
@@ -52,7 +54,7 @@ fullset = torch.Tensor(fullset.to_numpy())
 set_size = len(fullset)
 clients = []
 
-evalset, fullset = data.random_split(fullset, [int(len(fullset)*0.1), len(fullset) - int(len(fullset)*0.1)], generator=generator)
+evalset, fullset = data.random_split(fullset, [int(len(fullset)*0.1), len(fullset) - int(len(fullset)*0.1)], generator=eval_generator)
 #evalset = fullset[ : int(len(fullset)*0.1)]
 #fullset = fullset[int(len(fullset)*0.1):]
 
