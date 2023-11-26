@@ -13,7 +13,7 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 # Change constants here
 ###############################################################################
 MODE = int(sys.argv[1]) # 0 is training mode, 1 is eval mode, 2 is print params mode
-LIPSCHITZCONSTANT = 1
+LIPSCHITZCONSTANT = 10
 Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
@@ -22,7 +22,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 500
+N_EPOCHS = 300
 BATCH_SIZE = 64
 ###############################################################################
 
@@ -111,8 +111,8 @@ def eval_model(model, X_test, y_test, client_index):
         y_pred = model(X_test)
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
 
-        #print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
-        #print(y_test.flatten().numpy())
+        print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
+        print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         print("F1 Score:", f1)
