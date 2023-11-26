@@ -22,7 +22,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 200
+N_EPOCHS = 500
 BATCH_SIZE = 64
 ###############################################################################
 
