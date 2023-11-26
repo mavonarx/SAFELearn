@@ -55,7 +55,7 @@ clients = []
 evalset = fullset[ : int(len(fullset)*0.1)]
 fullset = fullset[int(len(fullset)*0.1):]
     
-
+print(fullset)
 
 # Split the data into non-overlapping parts
 split_size = len(fullset) // NUMBER_OF_CLIENTS 
@@ -187,7 +187,7 @@ for client_index, split_data in enumerate(clients):
             #print(f'Client {client_index}, Epoch {epoch}, latest loss {loss}')
         torch.save(model.state_dict(), f"{MODEL_PATH}Model_{client_index}.txt")
         #torch.save(loss_fn(y_pred, torch.reshape(y_train, (-1,)).to(torch.int64)), f"model/PPMImodels/Loss_{client_index}"
-    ## execute the code    
+    ## execute the code
 
     if (MODE == 0):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
