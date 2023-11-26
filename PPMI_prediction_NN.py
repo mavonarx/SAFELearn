@@ -92,25 +92,8 @@ class PPMIModel(nn.Module):
         return x
     
     
-
-
-if (MODE == 1):
-    model = PPMIModel()
-    # if there exists a global model from earlier learnings import it
-    model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
-    loss_fn = nn.CrossEntropyLoss()
     
-    X_eval = torch.tensor(evalset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset[:, 1], dtype=torch.float32).reshape(-1, 1)
     
-    y_pred_eval = model(X_eval)
-    
-    print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    exit()
-
-
-
 def eval_model(model, X_test, y_test, client_index):
     model.eval()
     loss_fn = nn.CrossEntropyLoss()
@@ -122,6 +105,28 @@ def eval_model(model, X_test, y_test, client_index):
 
         print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
         print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
+
+
+
+if (MODE == 1):
+    model = PPMIModel()
+    # if there exists a global model from earlier learnings import it
+    model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
+    
+    model.eval()
+    
+    X_eval = torch.tensor(evalset[:, 2:], dtype=torch.float32)
+    y_eval = torch.tensor(evalset[:, 1], dtype=torch.float32).reshape(-1, 1)
+
+    
+    y_pred_eval = model(X_eval)
+    print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    
+    eval_model(model, X_eval, y_eval, 1)
+    exit()
+
+
 
 
 
@@ -187,7 +192,6 @@ for client_index, split_data in enumerate(clients):
     if (MODE == 0):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
     eval_model(model, X_test, y_test, client_index)
-        
 
 
 def get_one_vec_sorted_layers(model):
