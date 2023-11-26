@@ -22,7 +22,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 50
+N_EPOCHS = 100
 BATCH_SIZE = 64
 ###############################################################################
 
@@ -52,11 +52,12 @@ fullset = torch.Tensor(fullset.to_numpy())
 set_size = len(fullset)
 clients = []
 
-evalset = fullset[ : int(len(fullset)*0.1)]
-fullset = fullset[int(len(fullset)*0.1):]
+evalset, fullset = data.random_split(fullset, [int(len(fullset)*0.1), len(fullset) - int(len(fullset)*0.1)], generator=generator)
+#evalset = fullset[ : int(len(fullset)*0.1)]
+#fullset = fullset[int(len(fullset)*0.1):]
 
-X_eval = torch.tensor(evalset[:, 2:], dtype=torch.float32)
-y_eval = torch.tensor(evalset[:, 1], dtype=torch.float32).reshape(-1, 1)
+X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
+y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
 
 # Split the data into non-overlapping parts
 split_size = len(fullset) // NUMBER_OF_CLIENTS 
@@ -99,13 +100,31 @@ def eval_model(model, X_test, y_test, client_index):
     model.eval()
     loss_fn = nn.CrossEntropyLoss()
 
+
+    import numpy as np
+    np.set_printoptions(threshold=np.inf)
+
+
     with torch.no_grad():
+        y_pred = model(X_test)
+        client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
+        #y_pred_integer = y_pred.round().cpu().numpy()
+        print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
+        print(y_test.flatten().numpy())
+        f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
+        auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
+        print("F1 Score:", f1)
+        print("AUROC:", auroc)
+        
+        
+    """with torch.no_grad():
         y_pred = model(X_test)
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
         #y_pred_integer = y_pred.round().cpu().numpy()
 
         print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
         print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
+        """
 
 
 
