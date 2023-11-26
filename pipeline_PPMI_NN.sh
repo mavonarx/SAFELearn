@@ -25,8 +25,8 @@ do
     
     echo ($SPLIT_STR) | python Split_Aggregate.py
     cd build
-    ./fedavg_aggregation -r 0 -n 100 -d "PPMI"&
-    ./fedavg_aggregation -r 1 -n 100 -d "PPMI"
+    ./fedavg_aggregation -q ($MODE) -r 0 -n 100 -d "PPMI"&
+    ./fedavg_aggregation -q ($MODE) -r 1 -n 100 -d "PPMI"
     cd ..
     echo c | python Split_Aggregate.py
 
