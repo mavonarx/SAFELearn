@@ -81,7 +81,18 @@ int main(int argc, char **argv)
     seclvl seclvl = get_sec_lvl(secparam);
 
     ROLE_TYPE role = mpc_role ? CLIENT_KEY : SERVER_KEY;
-    cout << get_time_as_string() << "This is Aggregator " << role << " and mode " << mode << endl;
+    string mode_str = ""; 
+    if (mode == 0){
+        mode_str = "normal average";
+    }
+    if (mode == 1){
+        mode_str = "weighted average";
+    }
+    if (mode == 2){
+        mode_str = "q_fed-average";
+    }
+
+    cout << get_time_as_string() << "This is Aggregator " << role << " and mode " << mode_str << endl;
     cout << "(Is server: " << (mpc_role == SERVER) << ")" << endl;
     string directory = DATA_DIR + dataset + "Splits/";
 
