@@ -171,7 +171,7 @@ if (mode == "s"):
 # Execution mode q = q-split
 ###############################################################################
 if (mode == "q"):
-    print(f"Splitting to data/{PROJECT}Splits")
+    print(f"QFED-Splitting to data/{PROJECT}Splits")
     localmodelpaths = get_models_as_list(f"model/{PROJECT}/Delta_")
     create_q_splits(GLOBAL_MODEL_PATH,localmodelpaths)
 
