@@ -41,7 +41,7 @@ if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
 if (MODE == 2):
-    print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "Nr. of Epochs, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
+    print("Q_FACTOR, ",Q_FACTOR , "TORCHSEED, ",  TORCHSEED , "Nr. of Clients, ", NUMBER_OF_CLIENTS, "N_EPOCHS, ", N_EPOCHS, "Batch Size, ", BATCH_SIZE)
     exit()
 
 
@@ -54,8 +54,6 @@ clients = []
 
 evalset = fullset[ : int(len(fullset)*0.1)]
 fullset = fullset[int(len(fullset)*0.1):]
-    
-print(fullset)
 
 # Split the data into non-overlapping parts
 split_size = len(fullset) // NUMBER_OF_CLIENTS 
