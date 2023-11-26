@@ -120,7 +120,7 @@ if (MODE == 1):
     
     y_pred_eval = model(X_eval)
     print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    print(multiclass_accuracy(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_accuracy(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     
     eval_model(model, X_eval, y_eval, 1)
