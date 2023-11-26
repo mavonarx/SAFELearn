@@ -11,7 +11,7 @@ MODE=2
 ##########################################################
 
 
-if ["$MODE" -eq 2 ]; then
+if [ "$MODE" -eq 2 ]; then
     SPLIT_STR="q"
 else
     SPLIT_STR="s"
@@ -23,10 +23,10 @@ do
     echo $i >> results.txt
     python PPMI_prediction_NN.py 0 $i
     
-    echo ($SPLIT_STR) | python Split_Aggregate.py
+    echo $SPLIT_STR | python Split_Aggregate.py
     cd build
-    ./fedavg_aggregation -q ($MODE) -r 0 -n 100 -d "PPMI"&
-    ./fedavg_aggregation -q ($MODE) -r 1 -n 100 -d "PPMI"
+    ./fedavg_aggregation -q $MODE -r 0 -n 100 -d "PPMI"&
+    ./fedavg_aggregation -q $MODE -r 1 -n 100 -d "PPMI"
     cd ..
     echo c | python Split_Aggregate.py
 
