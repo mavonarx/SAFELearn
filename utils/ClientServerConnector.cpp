@@ -47,7 +47,7 @@ tuple<NUMBER_TYPE *, NUMBER_TYPE *> read_deltas_and_h(const string &file_name, u
     SIGNED_NUMBER_TYPE a;
     while (input_file >> a) {
         if(next_entry_to_read == 0){
-            for (int i = 0; i< number_of_entries; i++){
+            for (uint32_t i = 0; i< number_of_entries; i++){
                 h_value[i] = a; 
             }
         }
