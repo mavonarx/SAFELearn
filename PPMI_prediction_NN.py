@@ -8,7 +8,7 @@ import sys
 import sklearn.metrics as sklm
 import os
 import glob
-from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc, multiclass_accuracy
+from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 
 # Change constants here
 ###############################################################################
@@ -102,7 +102,6 @@ def eval_model(model, X_test, y_test, client_index):
         #y_pred_integer = y_pred.round().cpu().numpy()
 
         print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
-        print(multiclass_accuracy(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
         print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
 
 
@@ -120,7 +119,6 @@ if (MODE == 1):
     
     y_pred_eval = model(X_eval)
     print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    print(multiclass_accuracy(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     
     eval_model(model, X_eval, y_eval, 1)
