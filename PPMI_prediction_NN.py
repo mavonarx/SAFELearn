@@ -109,7 +109,7 @@ def eval_model(model, X_test, y_test, client_index):
 
 
 
-"""if (MODE == 1):
+if (MODE == 1):
     model = PPMIModel()
     # if there exists a global model from earlier learnings import it
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
@@ -124,9 +124,9 @@ def eval_model(model, X_test, y_test, client_index):
     print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     
-    eval_model(model, X_eval, y_eval, 1)
+    #eval_model(model, X_eval, y_eval, 1)
     exit()
-"""
+
 
 
 
