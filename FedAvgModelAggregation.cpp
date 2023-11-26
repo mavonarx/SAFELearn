@@ -25,7 +25,7 @@ int32_t read_test_options(int32_t *argcp, char ***argvp, e_role *role,
                           uint16_t *port, string *dataset, size_t *n_models, size_t *m_parameters, uint8_t *mode)
 {
 
-    uint32_t int_role = 0, int_port = 0;
+    uint32_t int_role = 0, int_port = 0, int_mode = 0;
 
     parsing_ctx options[] =
         {{(void *)&int_role, T_NUM, "r", "Role: 0/1", true, false},
@@ -36,7 +36,7 @@ int32_t read_test_options(int32_t *argcp, char ***argvp, e_role *role,
          {(void *)address, T_STR, "a", "IP-address, default: localhost", false, false},
          {(void *)dataset, T_STR, "d", "dataset name", false, false},
          {(void *)&int_port, T_NUM, "p", "Port, default: 7766", false, false},
-         {(void *)mode, T_NUM, "q", "Modes are 0, 1, 2", false, false}};
+         {(void *)&int_mode, T_NUM, "q", "Modes are 0, 1, 2", false, false}};
 
     if (!parse_options(argcp, argvp, options,
                        sizeof(options) / sizeof(parsing_ctx)))
@@ -54,6 +54,9 @@ int32_t read_test_options(int32_t *argcp, char ***argvp, e_role *role,
         assert(int_port < 1U << (sizeof(uint16_t) * 8));
         *port = (uint16_t)int_port;
     }
+
+    assert(int_mode <3);
+    *mode = (uint8_t)int_mode;
 
     // delete options;
 
