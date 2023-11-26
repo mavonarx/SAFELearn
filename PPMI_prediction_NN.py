@@ -22,7 +22,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 100
+N_EPOCHS = 200
 BATCH_SIZE = 64
 ###############################################################################
 
@@ -108,9 +108,9 @@ def eval_model(model, X_test, y_test, client_index):
     with torch.no_grad():
         y_pred = model(X_test)
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
-        #y_pred_integer = y_pred.round().cpu().numpy()
-        print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
-        print(y_test.flatten().numpy())
+
+        #print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
+        #print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         print("F1 Score:", f1)
