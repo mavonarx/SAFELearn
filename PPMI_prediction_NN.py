@@ -55,6 +55,9 @@ clients = []
 evalset = fullset[ : int(len(fullset)*0.1)]
 fullset = fullset[int(len(fullset)*0.1):]
 
+X_eval = torch.tensor(evalset[:, 2:], dtype=torch.float32)
+y_eval = torch.tensor(evalset[:, 1], dtype=torch.float32).reshape(-1, 1)
+
 # Split the data into non-overlapping parts
 split_size = len(fullset) // NUMBER_OF_CLIENTS 
 for client_index in range(NUMBER_OF_CLIENTS):
@@ -189,7 +192,7 @@ for client_index, split_data in enumerate(clients):
 
     if (MODE == 0):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
-    eval_model(model, X_test, y_test, client_index)
+    eval_model(model, X_eval, y_eval, client_index)
 
 
 def get_one_vec_sorted_layers(model):
