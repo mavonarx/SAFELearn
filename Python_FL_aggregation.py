@@ -92,9 +92,12 @@ for i in range(1, CLIENTS):
     vec = torch.tensor(delta_wk_h_np)
     summed_h += vec[0]
     summed_deltas += vec[1:]
-    
 
-result = global_model_vec - (summed_deltas / summed_h)
-
-result = recover_model_from_vec(global_model.state_dict(), global_model_vec, global_model.state_dict().keys())
-torch.save(global_model.state_dict(), GLOBAL_MODEL_PATH)
+h = torch.empty(len(summed_deltas)).fill_(summed_h)
+#print(summed_deltas, "summed deltas")
+#print(h, "h vec should all be same value")
+print(torch.div(summed_deltas, h), "update")
+result = torch.subtract(global_model_vec , (torch.div(summed_deltas, h)))
+result_modell = recover_model_from_vec(global_model.state_dict(), result, global_model.state_dict().keys())
+#print(result_modell)
+torch.save(result_modell, GLOBAL_MODEL_PATH)

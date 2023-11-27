@@ -10,11 +10,14 @@ import os
 import glob
 from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 
+import sys
+np.set_printoptions(threshold=sys.maxsize)
+
 # Change constants here
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
 LIPSCHITZCONSTANT = 1  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 0
+Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -47,7 +50,7 @@ if (MODE == 2):
     exit()
 
 
-
+GLOBAL_LOSS = np.zeros(NUMBER_OF_CLIENTS) 
 fullset = pd.read_csv(INPUT_DATA_PATH)
 fullset = torch.Tensor(fullset.to_numpy())
 
@@ -142,6 +145,10 @@ if (MODE == 1):
 
     
     y_pred_eval = model(X_eval)
+    
+    print(torch.argmax(torch.nn.functional.softmax(y_pred_eval, dim=1), dim=1).numpy())
+    print(y_eval.flatten().numpy())
+    
     print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
     
@@ -159,8 +166,8 @@ if not os.path.exists(GLOBAL_MODEL_PATH):
     model = PPMIModel()
     torch.save(model.state_dict(), GLOBAL_MODEL_PATH)
 
-global_model = PPMIModel()
-global_model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
+#global_model = PPMIModel()
+#global_model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
 
 def delete_files(file_pattern):
     files_to_delete = glob.glob(file_pattern)
@@ -189,7 +196,10 @@ for client_index, split_data in enumerate(clients):
     # if there exists a global model from earlier learnings import it
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
     loss_fn = nn.CrossEntropyLoss()
+    
 
+    y_pred_loss = model(X_train)
+    GLOBAL_LOSS[client_index] = loss_fn(y_pred_loss, torch.reshape(y_train, (-1,)).to(torch.int64)).detach().numpy()
 
     optimizer = optim.Adam(model.parameters())
     def train_model(model, optimizer, X_train, y_train, loss_fn, n_epochs=100):
@@ -232,27 +242,41 @@ def get_one_vec_sorted_layers(model):
 
 
 
+def norm_grad(grad_list):
+    # input: nested gradients
+    # output: square of the L-2 norm
+
+    client_grads = grad_list[0] # shape now: (784, 26)
+
+    for i in range(1, len(grad_list)):
+        client_grads = np.append(client_grads, grad_list[i]) # output a flattened array
+
+    return np.sum(np.square(client_grads))
+
+
+
 def calculate_delta_wt(global_model, model, L):
     vec_glob = get_one_vec_sorted_layers(global_model.state_dict())
     vec_mod = get_one_vec_sorted_layers(model.state_dict())
-    return L * (vec_glob - vec_mod)
+    return torch.mul((torch.subtract(vec_glob,  vec_mod)), L)
 
 def calculate_delta(q, loss, deltawt):
-    return loss ** q * deltawt
+    return torch.mul(deltawt, loss**q)
 
 def calculate_ht(q, loss, deltawt, L):
-    return q * loss ** (q-1) * np.linalg.norm(deltawt.detach().numpy(),2) ** 2 + loss ** q * L
+    return q * (loss ** (q-1)) * np.linalg.norm(deltawt.detach().numpy(),2) ** 2 + (loss ** q) * L
 
 if (MODE == 0):
 
     for client_index in range(len(clients)):
         model = PPMIModel()
+        #print(client_loss[client_index])
         model.load_state_dict(torch.load(f"{MODEL_PATH}Model_{client_index}.txt"))
         deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT)
-        delta = calculate_delta(Q_FACTOR, client_loss[client_index], deltawt)
-        print(delta)
-        ht = calculate_ht(Q_FACTOR, client_loss[client_index], deltawt, LIPSCHITZCONSTANT)
-        print(ht)
+        #print(deltawt, "deltawt")
+        delta = calculate_delta(Q_FACTOR, GLOBAL_LOSS[client_index], deltawt)
+        ht = calculate_ht(Q_FACTOR, GLOBAL_LOSS[client_index], deltawt, LIPSCHITZCONSTANT)
+        #print(ht, "printing ht")
         combined = np.concatenate((np.array([ht]), delta.detach().numpy()))
         np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
         #f.write(delta.numpy() + "\n" + ht.numpy())
