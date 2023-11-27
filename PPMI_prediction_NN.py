@@ -131,7 +131,7 @@ if (MODE == 1):
     model.eval()
     
     X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.int64).reshape(-1,)
+    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1,)
 
     
     y_pred_eval = model(X_eval)
@@ -139,8 +139,8 @@ if (MODE == 1):
     print(torch.argmax(torch.nn.functional.softmax(y_pred_eval, dim=1), dim=1).numpy())
     print(y_eval.flatten().numpy())
     
-    print(multiclass_f1_score(y_pred_eval, y_eval), num_classes=3).numpy(), ",")
-    print(multiclass_auroc(y_pred_eval, y_eval), num_classes=3).numpy(), ",")
+    print(multiclass_f1_score(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
+    print(multiclass_auroc(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
     
     #eval_model(model, X_eval, y_eval, 1)
     exit()
