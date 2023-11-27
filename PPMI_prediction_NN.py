@@ -248,7 +248,7 @@ if (MODE == 0):
     for client_index in range(len(clients)):
         model = PPMIModel()
         model.load_state_dict(torch.load(f"{MODEL_PATH}Model_{client_index}.txt"))
-        deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT)
+        deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT) * 100
         delta = calculate_delta(Q_FACTOR, client_loss[client_index], deltawt)
         ht = calculate_ht(Q_FACTOR, client_loss[client_index], deltawt, LIPSCHITZCONSTANT)
         combined = np.concatenate((np.array([ht]), delta.detach().numpy()))

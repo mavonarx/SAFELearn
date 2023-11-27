@@ -106,10 +106,15 @@ ArithmeticShare q_fed_over_updates(uint32_t bitlen, size_t number_of_elements, v
         }
     }
 
-    ac->PutPrintValueGate(summed_deltas, "summed_deltas");
-    ac->PutPrintValueGate(summed_h, "summed_h");
+    
+    
     ArithmeticShare division = perform_division(bitlen, number_of_elements, ac, yc, summed_deltas, summed_h);
-    ArithmeticShare aggregated_update = ac->PutSUBGate(global_model, division);
+    ArithmeticShare 100_share = ac->PutSIMDCONSGate(number_of_elements, 100, bitlen);
+    ac->PutPrintValueGate(100_share, "100_share");
+    ArithmeticShare 100x_global_model = ac->PutMULGate(global_model, 100_share);
+    ac->PutPrintValueGate(100x_global_model, "100x_global_model");
+    ArithmeticShare 100x_aggregated_update = ac->PutSUBGate(100x_global_model, division);
+    ArithmeticShare aggregated_update = perform_division(bitlen, number_of_elements, ac, yc, 100x_aggregated_update, 100_share);
     return aggregated_update;
 }
 
