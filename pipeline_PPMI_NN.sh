@@ -10,6 +10,7 @@ python PPMI_prediction_NN.py 2 999  >> results.txt
 MODE=2
 ##########################################################
 
+echo MODE = $MODE >> results.txt
 
 if [ "$MODE" -eq 2 ]; then
     SPLIT_STR="q"
