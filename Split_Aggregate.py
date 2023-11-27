@@ -8,7 +8,6 @@ import glob
 ###############################################################################
 PUSH_FACTOR = 2 ** 10
 LIMIT = (2 ** 3) * PUSH_FACTOR
-SPLIT_LIMIT = (2 ** 13) * PUSH_FACTOR
 
 PROJECT = "PPMI"
 # path where the new global model will be saved after combining the splits
@@ -61,18 +60,19 @@ def unrestrict_values(recovered_restricted_vec):
 
 
 def split(restricted_vec):
-    a = torch.LongTensor(restricted_vec.shape).random_(-SPLIT_LIMIT, SPLIT_LIMIT)
+    a = torch.LongTensor(restricted_vec.shape).random_(-LIMIT, LIMIT)
     b = restricted_vec - a
     safety_counter = 0
     while True:
-        indices_to_recompute = torch.nonzero(torch.abs(b) >= SPLIT_LIMIT)
+        indices_to_recompute = torch.nonzero(torch.abs(b) >= LIMIT)
         if len(indices_to_recompute) == 0:
             break
         if safety_counter > 100:
+            print(restricted_vec[0])
             raise Exception('Did not find suitable randomvalues')
         indices_to_recompute = indices_to_recompute.view(-1)
         #print(f'\tRegenerate {indices_to_recompute.shape[0]} elements (from {restricted_vec.shape[0]})')
-        a[indices_to_recompute] = torch.LongTensor(restricted_vec[indices_to_recompute].shape).random_(-SPLIT_LIMIT, SPLIT_LIMIT)
+        a[indices_to_recompute] = torch.LongTensor(restricted_vec[indices_to_recompute].shape).random_(-LIMIT, LIMIT)
         b = restricted_vec - a
         safety_counter += 1
     return a, b
