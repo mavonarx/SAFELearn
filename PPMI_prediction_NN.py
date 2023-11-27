@@ -111,8 +111,8 @@ def eval_model(model, X_test, y_test, client_index):
         y_pred = model(X_test)
         client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
 
-        print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
-        print(y_test.flatten().numpy())
+        #print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
+        #print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         print("F1 Score:", f1)
