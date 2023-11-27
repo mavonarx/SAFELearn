@@ -17,7 +17,7 @@ np.set_printoptions(threshold=sys.maxsize)
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
 LIPSCHITZCONSTANT = 1  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 1
+Q_FACTOR = 0
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -166,8 +166,8 @@ if not os.path.exists(GLOBAL_MODEL_PATH):
     model = PPMIModel()
     torch.save(model.state_dict(), GLOBAL_MODEL_PATH)
 
-#global_model = PPMIModel()
-#global_model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
+global_model = PPMIModel()
+global_model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
 
 def delete_files(file_pattern):
     files_to_delete = glob.glob(file_pattern)
