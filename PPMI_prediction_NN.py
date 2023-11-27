@@ -212,7 +212,6 @@ for client_index, split_data in enumerate(clients):
     ## execute the code
 
     if (MODE == 0):
-        print(len(X_train))
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
     eval_model(model, X_test, y_test, client_index)
 
