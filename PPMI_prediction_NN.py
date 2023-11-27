@@ -12,8 +12,8 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 
 # Change constants here
 ###############################################################################
-MODE = int(sys.argv[1]) # 0 is training mode, 1 is eval mode, 2 is print params mode
-LIPSCHITZCONSTANT = 10
+MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
+LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (ADAM has learning_rate of e^-3 so we use 1000 as default)
 Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
