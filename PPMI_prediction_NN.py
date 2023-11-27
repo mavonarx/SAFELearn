@@ -62,9 +62,6 @@ evalset, fullset = data.random_split(fullset, [int(len(fullset)*0.1), len(fullse
 #evalset = fullset[ : int(len(fullset)*0.1)]
 #fullset = fullset[int(len(fullset)*0.1):]
 
-X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
-
 # Split the data into non-overlapping parts
 split_size = len(fullset) // NUMBER_OF_CLIENTS 
 for client_index in range(NUMBER_OF_CLIENTS):
@@ -102,7 +99,7 @@ class PPMIModel(nn.Module):
     
     
     
-def eval_model(model, X_test, y_test, client_index):
+def eval_model(model, X_test, y_test):
     model.eval()
     loss_fn = nn.CrossEntropyLoss()
 
@@ -129,18 +126,19 @@ if (MODE == 1):
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
     
     model.eval()
-    
     X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
     y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.int64).reshape(-1,)
 
+    eval_model(model, X_eval, y_eval)
+
+     
+    #y_pred_eval = model(X_eval)
     
-    y_pred_eval = model(X_eval)
+    #print(torch.argmax(torch.nn.functional.softmax(y_pred_eval, dim=1), dim=1).numpy())
+    #print(y_eval.flatten().numpy())
     
-    print(torch.argmax(torch.nn.functional.softmax(y_pred_eval, dim=1), dim=1).numpy())
-    print(y_eval.flatten().numpy())
-    
-    print(multiclass_f1_score(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
-    print(multiclass_auroc(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
+    #print(multiclass_f1_score(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
+    #print(multiclass_auroc(y_pred_eval, y_eval, num_classes=3).numpy(), ",")
     
     #eval_model(model, X_eval, y_eval, 1)
     exit()
