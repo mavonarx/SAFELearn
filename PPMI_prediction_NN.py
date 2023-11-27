@@ -131,7 +131,7 @@ if (MODE == 1):
     model.eval()
     
     X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1,)
+    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.int64).reshape(-1,)
 
     
     y_pred_eval = model(X_eval)
