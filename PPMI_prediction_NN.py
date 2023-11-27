@@ -14,7 +14,7 @@ from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
 LIPSCHITZCONSTANT = 1  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 1
+Q_FACTOR = 0
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -248,9 +248,11 @@ if (MODE == 0):
     for client_index in range(len(clients)):
         model = PPMIModel()
         model.load_state_dict(torch.load(f"{MODEL_PATH}Model_{client_index}.txt"))
-        deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT) * 100
+        deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT)
         delta = calculate_delta(Q_FACTOR, client_loss[client_index], deltawt)
+        print(delta)
         ht = calculate_ht(Q_FACTOR, client_loss[client_index], deltawt, LIPSCHITZCONSTANT)
+        print(ht)
         combined = np.concatenate((np.array([ht]), delta.detach().numpy()))
         np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
         #f.write(delta.numpy() + "\n" + ht.numpy())
