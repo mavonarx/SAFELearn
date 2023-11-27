@@ -49,8 +49,9 @@ if (MODE == 2):
     print("Q_FACTOR ",Q_FACTOR , ", TORCHSEED ",  TORCHSEED , ", Nr. of Clients ", NUMBER_OF_CLIENTS, ", N_EPOCHS ", N_EPOCHS, ", Batch Size ", BATCH_SIZE)
     exit()
 
-
+# initalized an np array for storing the loss of each clients data in respect to the current global model without training of the client itself. 
 GLOBAL_LOSS = np.zeros(NUMBER_OF_CLIENTS) 
+
 fullset = pd.read_csv(INPUT_DATA_PATH)
 fullset = torch.Tensor(fullset.to_numpy())
 
@@ -112,7 +113,6 @@ def eval_model(model, X_test, y_test, client_index):
 
     with torch.no_grad():
         y_pred = model(X_test)
-        client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
 
         #print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
         #print(y_test.flatten().numpy())
@@ -121,16 +121,6 @@ def eval_model(model, X_test, y_test, client_index):
         print("F1 Score:", f1)
         print("AUROC:", auroc)
         
-        
-    """with torch.no_grad():
-        y_pred = model(X_test)
-        client_loss[client_index] = loss_fn(y_pred, torch.reshape(y_test, (-1,)).to(torch.int64))
-        #y_pred_integer = y_pred.round().cpu().numpy()
-
-        print(multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
-        print(multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy(), ",")
-        """
-
 
 
 if (MODE == 1):
@@ -141,7 +131,7 @@ if (MODE == 1):
     model.eval()
     
     X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
+    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.int64).reshape(-1,)
 
     
     y_pred_eval = model(X_eval)
@@ -149,14 +139,11 @@ if (MODE == 1):
     print(torch.argmax(torch.nn.functional.softmax(y_pred_eval, dim=1), dim=1).numpy())
     print(y_eval.flatten().numpy())
     
-    print(multiclass_f1_score(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
-    print(multiclass_auroc(y_pred_eval, torch.reshape( y_eval, (-1, )), num_classes=3).numpy(), ",")
+    print(multiclass_f1_score(y_pred_eval, y_eval), num_classes=3).numpy(), ",")
+    print(multiclass_auroc(y_pred_eval, y_eval), num_classes=3).numpy(), ",")
     
     #eval_model(model, X_eval, y_eval, 1)
     exit()
-
-
-
 
 
 
@@ -188,9 +175,9 @@ for client_index, split_data in enumerate(clients):
     train_data, test_data = data.random_split(split_data, [train_size, test_size], generator=generator)
         
     X_train = torch.tensor(train_data.dataset[:, 2:], dtype=torch.float32)
-    y_train = torch.tensor(train_data.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
+    y_train = torch.tensor(train_data.dataset[:, 1], dtype=torch.int64).reshape(-1,)
     X_test = torch.tensor(test_data.dataset[:, 2:], dtype=torch.float32)
-    y_test = torch.tensor(test_data.dataset[:, 1], dtype=torch.float32).reshape(-1, 1)
+    y_test = torch.tensor(test_data.dataset[:, 1], dtype=torch.int64).reshape(-1,)
     model = PPMIModel()
         
     # if there exists a global model from earlier learnings import it
@@ -199,7 +186,7 @@ for client_index, split_data in enumerate(clients):
     
 
     y_pred_loss = model(X_train)
-    GLOBAL_LOSS[client_index] = loss_fn(y_pred_loss, torch.reshape(y_train, (-1,)).to(torch.int64)).detach().numpy()
+    GLOBAL_LOSS[client_index] = loss_fn(y_pred_loss, y_train).detach().numpy()
 
     optimizer = optim.Adam(model.parameters())
     def train_model(model, optimizer, X_train, y_train, loss_fn, n_epochs=100):
@@ -212,7 +199,7 @@ for client_index, split_data in enumerate(clients):
                 Xbatch = X_train[i:i+BATCH_SIZE].to(device)
                 ybatch = y_train[i:i+BATCH_SIZE].to(device)
                 y_pred = model(Xbatch)
-                loss = loss_fn(y_pred, torch.reshape(ybatch, (-1,)).to(torch.int64))
+                loss = loss_fn(y_pred, ybatch)
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
