@@ -208,7 +208,7 @@ for client_index, split_data in enumerate(clients):
 
     if (MODE == 0):
         train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
-    eval_model(model, X_test, y_test, client_index)
+    eval_model(model, X_test, y_test)
 
 
 def get_one_vec_sorted_layers(model):
