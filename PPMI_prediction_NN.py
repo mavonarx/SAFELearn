@@ -266,5 +266,5 @@ if (MODE == 0):
         np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
         #f.write(delta.numpy() + "\n" + ht.numpy())
         #f.close()
-        
+    print(GLOBAL_LOSS) 
         
