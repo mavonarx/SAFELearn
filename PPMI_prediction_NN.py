@@ -16,8 +16,8 @@ np.set_printoptions(threshold=sys.maxsize)
 # Change constants here
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
-LIPSCHITZCONSTANT = 1  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 0
+LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
+Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -46,7 +46,7 @@ if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
 if (MODE == 2):
-    print("Q_FACTOR ",Q_FACTOR , ", TORCHSEED ",  TORCHSEED , ", Nr. of Clients ", NUMBER_OF_CLIENTS, ", N_EPOCHS ", N_EPOCHS, ", Batch Size ", BATCH_SIZE)
+    print("Q_FACTOR ",Q_FACTOR , ", TORCHSEED ",  TORCHSEED , ", Nr. of Clients ", NUMBER_OF_CLIENTS, ", N_EPOCHS ", N_EPOCHS, ", Batch Size ", BATCH_SIZE, "LIPSCHITZ:", LIPSCHITZCONSTANT)
     exit()
 
 # initalized an np array for storing the loss of each clients data in respect to the current global model without training of the client itself. 
