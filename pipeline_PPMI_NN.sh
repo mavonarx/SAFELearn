@@ -8,9 +8,11 @@ python PPMI_prediction_NN.py 2 999  >> results.txt
 ##########################################################
 # mode 2 = Q-fed-avg, mode 1 = weighted-avg, mode 0 = normal avg
 MODE=2
+ROUNDS=2
 ##########################################################
 echo "SAFELearn" >> results.txt
 echo MODE = $MODE >> results.txt
+echo ROUNDS = ${ROUNDS} >> results.txt
 
 
 if [ "$MODE" -eq 2 ]; then
@@ -19,7 +21,7 @@ else
     SPLIT_STR="s"
 fi 
 
-for i in $(seq 1 5);
+for i in $(seq 1 ${ROUNDS});
 do
 
     echo $i >> results.txt
