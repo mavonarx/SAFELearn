@@ -9,8 +9,9 @@ python PPMI_prediction_NN.py 2 999  >> results.txt
 # mode 2 = Q-fed-avg, mode 1 = weighted-avg, mode 0 = normal avg
 MODE=2
 ##########################################################
-
+echo "SAFELearn" >> results.txt
 echo MODE = $MODE >> results.txt
+
 
 if [ "$MODE" -eq 2 ]; then
     SPLIT_STR="q"

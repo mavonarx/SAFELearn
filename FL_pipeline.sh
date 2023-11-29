@@ -2,6 +2,7 @@
 
 rm results.txt
 rm model/PPMI/GlobalModel.txt
+echo "NO safelearn" >> results.txt
 python PPMI_prediction_NN.py 2 999  >> results.txt
 
 for i in $(seq 1 5);
