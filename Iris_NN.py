@@ -9,7 +9,15 @@ import sklearn.metrics as sklm
 import os
 import glob
 from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
+import numpy as np
+import torch
+from torch import nn
+from torch.autograd import Variable
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from keras.utils import to_categorical
+import torch.nn.functional as F
 
 import sys
 np.set_printoptions(threshold=sys.maxsize)
@@ -21,12 +29,12 @@ LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (safelearn cant ha
 Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
-NUMBER_OF_CLIENTS =3
-PROJECT = "PPMI"
-INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
+NUMBER_OF_CLIENTS = 3
+PROJECT = "IRIS"
+#INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 300
+N_EPOCHS = 10
 BATCH_SIZE = 64
 ###############################################################################
 
@@ -53,48 +61,41 @@ if (MODE == 2):
 # initalized an np array for storing the loss of each clients data in respect to the current global model without training of the client itself. 
 GLOBAL_LOSS = np.zeros(NUMBER_OF_CLIENTS) 
 
-fullset = pd.read_csv(INPUT_DATA_PATH)
-fullset = torch.Tensor(fullset.to_numpy())
+features, labels = load_iris(return_X_y= True)
 
-set_size = len(fullset)
-clients = []
 
-evalset, fullset = data.random_split(fullset, [int(len(fullset)*0.1), len(fullset) - int(len(fullset)*0.1)], generator=eval_generator)
-#evalset = fullset[ : int(len(fullset)*0.1)]
-#fullset = fullset[int(len(fullset)*0.1):]
+
+
+clients_features = []
+clients_labels = []
+
+
+features_train,features_eval, labels_train, labels_eval = train_test_split(features, labels, random_state=42, shuffle=True)
+x_eval, y_eval = Variable(torch.from_numpy(features_eval)).float(), Variable(torch.from_numpy(labels_eval)).long()
 
 # Split the data into non-overlapping parts
-split_size = len(fullset) // NUMBER_OF_CLIENTS 
+split_size = len(features_train) // NUMBER_OF_CLIENTS 
 for client_index in range(NUMBER_OF_CLIENTS):
-    split = fullset[client_index * split_size: (client_index + 1) * split_size]
-    clients.append(split)
+    split_features = features_train[client_index * split_size: (client_index + 1) * split_size]
+    split_labels = labels_train[client_index * split_size: (client_index + 1) * split_size]
+    clients_features.append(split_features)
+    clients_labels.append(split_labels)
 
 client_loss = np.zeros(NUMBER_OF_CLIENTS) 
 
 
 
-class PPMIModel(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear1 = nn.Linear(12,20)
-        self.linear2 = nn.Linear(20,15)
-        self.linear3 = nn.Linear(15,12)
-        self.linear4 = nn.Linear(12,4)
-        self.linear5 = nn.Linear(4,3)
-        self.act_fn = nn.SiLU()
-        self.sigm = nn.Sigmoid()
-
-
+class IrisModel(nn.Module):
+    def __init__(self, input_dim):
+        super(IrisModel, self).__init__()
+        self.layer1 = nn.Linear(input_dim,50)
+        self.layer2 = nn.Linear(50, 20)
+        self.layer3 = nn.Linear(20, 3)
+        
     def forward(self, x):
-        x = self.linear1(x)
-        x = self.act_fn(x)
-        x = self.linear2(x)
-        x = self.act_fn(x)
-        x = self.linear3(x)
-        x = self.act_fn(x)
-        x = self.linear4(x)
-        x = self.act_fn(x)
-        x = self.linear5(x)
+        x = F.relu(self.layer1(x))
+        x = F.relu(self.layer2(x))
+        x = F.softmax(self.layer3(x)) # To check with the loss function
         return x
     
     
@@ -111,8 +112,10 @@ def eval_model(model, X_test, y_test):
 
     with torch.no_grad():
         y_pred = model(X_test)
-
-        #print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy())
+        
+        print(y_eval, ", y_eval")
+        print(torch.argmax(torch.nn.functional.softmax(y_pred, dim=1), dim=1).numpy(), ", y_pred")
+        print(len(features), ", length of iris")
         #print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
@@ -123,15 +126,13 @@ def eval_model(model, X_test, y_test):
 
 
 if (MODE == 1):
-    model = PPMIModel()
+    model = IrisModel(features_train.shape[1])
     # if there exists a global model from earlier learnings import it
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
     
     model.eval()
-    X_eval = torch.tensor(evalset.dataset[:, 2:], dtype=torch.float32)
-    y_eval = torch.tensor(evalset.dataset[:, 1], dtype=torch.int64).reshape(-1,)
 
-    eval_model(model, X_eval, y_eval)
+    eval_model(model, x_eval, y_eval)
 
      
     #y_pred_eval = model(X_eval)
@@ -150,10 +151,10 @@ if (MODE == 1):
 
 # if the global model does not yet exist create a new fully untrained one
 if not os.path.exists(GLOBAL_MODEL_PATH):
-    model = PPMIModel()
+    model = IrisModel(features_train.shape[1])
     torch.save(model.state_dict(), GLOBAL_MODEL_PATH)
 
-global_model = PPMIModel()
+global_model = IrisModel(features_train.shape[1])
 global_model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
 
 def delete_files(file_pattern):
@@ -169,26 +170,28 @@ delete_files(f"{MODEL_PATH}Delta_*")
 
 
 
-for client_index, split_data in enumerate(clients):
-    train_size = int(0.8 * len(split_data))
-    test_size = len(split_data) - train_size
-    train_data, test_data = data.random_split(split_data, [train_size, test_size], generator=generator)
+for client_index, clients_features in enumerate(clients_features):
+    clients_targets = clients_labels[client_index]
+    train_size = int(0.8 * len(clients_features))
+    test_size = len(clients_features) - train_size
+    
+    train_features, test_features, train_labels, test_labels = train_test_split(features_train, labels_train, random_state=42, shuffle=True)
+    
+    
+    x_train, y_train = Variable(torch.from_numpy(train_features)).float(), Variable(torch.from_numpy(train_labels)).long()
+    x_test, y_test = Variable(torch.from_numpy(test_features)).float(), Variable(torch.from_numpy(test_labels)).long()
         
-    X_train = torch.tensor(train_data.dataset[:, 2:], dtype=torch.float32)
-    y_train = torch.tensor(train_data.dataset[:, 1], dtype=torch.int64).reshape(-1,)
-    X_test = torch.tensor(test_data.dataset[:, 2:], dtype=torch.float32)
-    y_test = torch.tensor(test_data.dataset[:, 1], dtype=torch.int64).reshape(-1,)
-    model = PPMIModel()
+    model = IrisModel(features_train.shape[1])
         
     # if there exists a global model from earlier learnings import it
     model.load_state_dict(torch.load(GLOBAL_MODEL_PATH))
     loss_fn = nn.CrossEntropyLoss()
     
 
-    y_pred_loss = model(X_train)
+    y_pred_loss = model(x_train)
     GLOBAL_LOSS[client_index] = loss_fn(y_pred_loss, y_train).detach().numpy()
 
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
     def train_model(model, optimizer, X_train, y_train, loss_fn, n_epochs=100):
 
         model.train()
@@ -209,8 +212,8 @@ for client_index, split_data in enumerate(clients):
     ## execute the code
 
     if (MODE == 0):
-        train_model(model, optimizer, X_train, y_train, loss_fn, N_EPOCHS)
-    eval_model(model, X_test, y_test)
+        train_model(model, optimizer, x_train, y_train, loss_fn, N_EPOCHS)
+    eval_model(model, x_test, y_test)
 
 
 def get_one_vec_sorted_layers(model):
@@ -255,8 +258,8 @@ def calculate_ht(q, loss, deltawt, L):
 
 if (MODE == 0):
 
-    for client_index in range(len(clients)):
-        model = PPMIModel()
+    for client_index in range((NUMBER_OF_CLIENTS)):
+        model = IrisModel(features_train.shape[1])
         #print(client_loss[client_index])
         model.load_state_dict(torch.load(f"{MODEL_PATH}Model_{client_index}.txt"))
         deltawt = calculate_delta_wt(global_model, model, LIPSCHITZCONSTANT)
