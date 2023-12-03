@@ -36,11 +36,11 @@ def get_one_vec_sorted_layers(model):
     layer_names = model.keys()
     size = 0
     for name in layer_names:
-        size += model[name].view(-1).shape[0]
+        size += model[name].reshape(-1).shape[0]
     sum_var = np.array(size).fill_(0)
     size = 0
     for name in layer_names:
-        layer_as_vector = model[name].view(-1)
+        layer_as_vector = model[name].reshape(-1)
         layer_width = layer_as_vector.shape[0]
         sum_var[size:size + layer_width] = layer_as_vector
         size += layer_width
@@ -71,7 +71,7 @@ def split(restricted_vec:np.ndarray):
         if safety_counter > 100:
             #print(restricted_vec[0])
             raise Exception('Did not find suitable randomvalues')
-        indices_to_recompute = indices_to_recompute.view(-1)
+        indices_to_recompute = indices_to_recompute.reshape(-1)
         #print(f'\tRegenerate {indices_to_recompute.shape[0]} elements (from {restricted_vec.shape[0]})')
         a[indices_to_recompute] = np.random.rand(restricted_vec[indices_to_recompute].shape) * LIMIT
         b = restricted_vec - a
@@ -135,7 +135,7 @@ def recover_model_from_vec(example_model, vec_to_recover, layer_names):
         entries_in_layer = determine_number_of_entries_in_matrix(expected_shape)
         end_index_of_current_layer = start_index_of_next_layer + entries_in_layer
         entries = vec_to_recover[start_index_of_next_layer: end_index_of_current_layer]
-        result[layer_name] = entries.view(expected_shape)
+        result[layer_name] = entries.reshape(expected_shape)
         start_index_of_next_layer += entries_in_layer
     return result
 
