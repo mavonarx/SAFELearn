@@ -42,7 +42,7 @@ class Server(BaseFedarated):
 
         num_clients = len(self.clients)
         pk = np.ones(num_clients) * 1.0 / num_clients
-        comunication_index = self.round
+        comunication_index = 0
         #for i in range(self.num_rounds+1):
         #if i % self.eval_every == 0:
         num_test, num_correct_test = self.test() # have set the latest model for all clients
