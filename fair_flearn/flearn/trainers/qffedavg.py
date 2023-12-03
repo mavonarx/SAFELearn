@@ -39,7 +39,7 @@ class Server(BaseFedarated):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
             hetero_model.append(loaded_model[:100])
-            hetero_model.append(loaded_model[101])
+            hetero_model.append(loaded_model[100])
             print(hetero_model)
             self.latest_model = hetero_model
 
