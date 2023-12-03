@@ -88,7 +88,6 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        self.round += 1
         
         
         # aggregate using the dynamic step-size
