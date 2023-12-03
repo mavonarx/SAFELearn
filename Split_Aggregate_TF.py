@@ -67,12 +67,13 @@ def split(restricted_vec:np.ndarray):
     safety_counter = 0
     while True:
         indices_to_recompute = np.nonzero(np.abs(b) >= LIMIT)
+        indices_to_recompute = indices_to_recompute[0]
         if len(indices_to_recompute) == 0:
             break
         if safety_counter > 100:
             #print(restricted_vec[0])
             raise Exception('Did not find suitable randomvalues')
-        indices_to_recompute = indices_to_recompute[0].reshape(-1)
+        indices_to_recompute = indices_to_recompute.reshape(-1)
         #print(f'\tRegenerate {indices_to_recompute.shape[0]} elements (from {restricted_vec.shape[0]})')
         a[indices_to_recompute] = np.random.uniform(-LIMIT, LIMIT,restricted_vec[indices_to_recompute].shape)
         b = restricted_vec - a
