@@ -18,7 +18,7 @@ DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS = 3
 PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
-MODEL_PATH= f"model/{PROJECT}/"
+MODEL_PATH= f"../model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
 N_EPOCHS = 50
 BATCH_SIZE = 64
@@ -26,19 +26,17 @@ BATCH_SIZE = 64
 
 
 class Server(BaseFedarated):
-    def __init__(self, params, learner, dataset, round):
+    def __init__(self, params, learner, dataset):
         print('Using fair fed avg to Train')
         self.inner_opt = tf.compat.v1.train.GradientDescentOptimizer(params['learning_rate'])
         super(Server, self).__init__(params, learner, dataset)
-        self.round = round
 
     def train(self):
         print('Training with {} workers ---'.format(self.clients_per_round))
 
         num_clients = len(self.clients)
         pk = np.ones(num_clients) * 1.0 / num_clients
-        comunication_index = self.round
-
+        comunication_index = 0
         #for i in range(self.num_rounds+1):
         #if i % self.eval_every == 0:
         num_test, num_correct_test = self.test() # have set the latest model for all clients
@@ -75,20 +73,20 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
-            
+            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,)))
+            weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
         
-            combined = np.concatenate((np.array([hs]), Deltas))
+            combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
-            print(weights_before)
-        np.savetxt(f"{GLOBAL_MODEL_PATH}.txt", weights_before, fmt='%.8f')
+        np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
         
         
         # aggregate using the dynamic step-size
-        self.latest_model = self.aggregate2(weights_before, Deltas, hs)
+        #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
 
                     
 

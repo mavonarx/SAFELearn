@@ -23,7 +23,7 @@ fi
 for i in $(seq 1 ${ROUNDS});
 do
     echo $i >> results.txt
-    cd fair_flearn_v2
+    cd fair_flearn
     ./run.sh
     cd ..
     echo $SPLIT_STR | python Split_Aggregate_TF.py
