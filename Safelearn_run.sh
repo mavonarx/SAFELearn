@@ -8,7 +8,7 @@ rm model/PPMI/GlobalModel.txt
 ##########################################################
 # mode 2 = Q-fed-avg, mode 1 = weighted-avg, mode 0 = normal avg
 MODE=2
-ROUNDS=5
+ROUNDS=20
 ##########################################################
 echo "SAFELearn" >> results.txt
 echo MODE = $MODE >> results.txt
