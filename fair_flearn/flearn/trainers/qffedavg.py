@@ -36,13 +36,16 @@ class Server(BaseFedarated):
         print('Training with {} workers ---'.format(self.clients_per_round))
         
         if os.path.exists(GLOBAL_MODEL_PATH):
-            loaded_model = np.loadtxt(GLOBAL_MODEL_PATH)
-            print(loaded_model)
-            self.latest_model = loaded_model
+            hetero_model = []
+            loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
+            hetero_model.append(np.array(loaded_model[:100]).reshape(100, 1))
+            hetero_model.append(np.array(loaded_model[100]).reshape(1,))
+            print(hetero_model)
+            self.latest_model = hetero_model
 
         num_clients = len(self.clients)
         pk = np.ones(num_clients) * 1.0 / num_clients
-        comunication_index = self.round
+        comunication_index = 0
         #for i in range(self.num_rounds+1):
         #if i % self.eval_every == 0:
         num_test, num_correct_test = self.test() # have set the latest model for all clients
@@ -88,7 +91,6 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        self.round += 1
         
         
         # aggregate using the dynamic step-size

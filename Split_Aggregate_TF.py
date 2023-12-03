@@ -10,7 +10,7 @@ import glob
 # Change constants here
 ###############################################################################
 PUSH_FACTOR = 2 ** 10
-LIMIT = (2 ** 3) * PUSH_FACTOR
+LIMIT = (2 ** 13) * PUSH_FACTOR
 
 PROJECT = "PPMI"
 # path where the new global model will be saved after combining the splits
@@ -57,7 +57,6 @@ def restrict_values(vec:np.ndarray):
 
 
 def unrestrict_values(recovered_restricted_vec):
-    recovered_restricted_vec = recovered_restricted_vec.type(torch.FloatTensor)
     return recovered_restricted_vec / PUSH_FACTOR
 
 
@@ -143,14 +142,14 @@ def recover_model_from_vec(example_model, vec_to_recover, layer_names):
 
 
 def determine_aggregated_model(old_global_model_path, path_to_share1, path_to_share2):
-    old_global_model = torch.load(old_global_model_path)
-    layer_names = old_global_model.keys()
+    #old_global_model = torch.load(old_global_model_path)
+    #layer_names = old_global_model.keys()
     share1 = np.loadtxt(path_to_share1, dtype=np.int64)
     share2 = np.loadtxt(path_to_share2, dtype=np.int64)
     restricted_vec = share1 + share2
-    np.savetxt("./data/Aggregated/combined", restricted_vec, fmt='%d') #used for debugging purposes 
     unrestricted_vec = unrestrict_values(restricted_vec)
-    return recover_model_from_vec(old_global_model, unrestricted_vec, layer_names)
+    np.savetxt(GLOBAL_MODEL_PATH, unrestricted_vec) #used for debugging purposes 
+    #return recover_model_from_vec(old_global_model, unrestricted_vec, layer_names)
 
 def get_models_as_list(filename_without_i):
     localmodelpaths = []
@@ -182,5 +181,5 @@ if (mode == "q"):
 ###############################################################################
 if (mode == "c"):
     print("Aggregating! - new model will be saved at", NEW_MODEL_PATH)
-    newmodel = determine_aggregated_model(GLOBAL_MODEL_PATH, "./data/Aggregated/AggregatedModel_A.txt", "./data/Aggregated/AggregatedModel_B.txt")
-    torch.save(newmodel, NEW_MODEL_PATH)
+    determine_aggregated_model(GLOBAL_MODEL_PATH, "./data/Aggregated/AggregatedModel_A.txt", "./data/Aggregated/AggregatedModel_B.txt")
+    
