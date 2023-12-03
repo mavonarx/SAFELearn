@@ -21,7 +21,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"../model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 50
+N_EPOCHS = 5
 BATCH_SIZE = 64
 ###############################################################################
 
@@ -40,7 +40,6 @@ class Server(BaseFedarated):
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
             hetero_model.append(np.array(loaded_model[:100]).reshape(100, 1))
             hetero_model.append(np.array(loaded_model[100]).reshape(1,))
-            print(hetero_model)
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)

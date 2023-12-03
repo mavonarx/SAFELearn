@@ -24,7 +24,7 @@ for i in $(seq 1 ${ROUNDS});
 do
     echo $i >> results.txt
     cd fair_flearn
-    ./run.sh
+    ./run.sh >> results.txt
     cd ..
     echo $SPLIT_STR | python Split_Aggregate_TF.py
     cd build
