@@ -112,8 +112,8 @@ def create_splits(global_model_path, local_model_paths, q=False):
         a, b = split(restricted_local_vec)
         a_file = f'{SPLITTED_FILE_DIR}/A_C{i:03d}.txt'
         b_file = f'{SPLITTED_FILE_DIR}/B_C{i:03d}.txt'
-        np.savetxt(a_file, a.numpy(), fmt='%d')
-        np.savetxt(b_file, b.numpy(), fmt='%d')
+        np.savetxt(a_file, a, fmt='%d')
+        np.savetxt(b_file, b, fmt='%d')
     print(f"Splitted {len(local_model_paths)} models into {SPLITTED_FILE_DIR}")
 
 
@@ -148,7 +148,7 @@ def determine_aggregated_model(old_global_model_path, path_to_share1, path_to_sh
     share2 = np.loadtxt(path_to_share2, dtype=np.int64)
     restricted_vec = share1 + share2
     np.savetxt("./data/Aggregated/combined", restricted_vec, fmt='%d') #used for debugging purposes 
-    unrestricted_vec = unrestrict_values(torch.from_numpy(restricted_vec))
+    unrestricted_vec = unrestrict_values(restricted_vec)
     return recover_model_from_vec(old_global_model, unrestricted_vec, layer_names)
 
 def get_models_as_list(filename_without_i):
