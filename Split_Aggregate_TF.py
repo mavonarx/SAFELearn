@@ -62,7 +62,7 @@ def unrestrict_values(recovered_restricted_vec):
 
 
 def split(restricted_vec:np.ndarray):
-    a = np.random.rand(restricted_vec.shape[0]) * LIMIT
+    a = np.random.uniform(-LIMIT, LIMIT,restricted_vec.shape)
     b = restricted_vec - a
     safety_counter = 0
     while True:
@@ -74,7 +74,7 @@ def split(restricted_vec:np.ndarray):
             raise Exception('Did not find suitable randomvalues')
         indices_to_recompute = indices_to_recompute.reshape(-1)
         #print(f'\tRegenerate {indices_to_recompute.shape[0]} elements (from {restricted_vec.shape[0]})')
-        a[indices_to_recompute] = np.random.rand(restricted_vec[indices_to_recompute].shape) * LIMIT
+        a[indices_to_recompute] = np.random.uniform(-LIMIT, LIMIT,restricted_vec[indices_to_recompute].shape) * LIMIT
         b = restricted_vec - a
         safety_counter += 1
     return a, b
