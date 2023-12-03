@@ -36,7 +36,7 @@ def get_one_vec_sorted_layers(model):
     layer_names = model.keys()
     size = 0
     for name in layer_names:
-        size += model[name].view(-1).shape[0]
+        size += model[name].reshape(-1).shape[0]
     sum_var = np.array(size).fill(0)
 
     size = 0
@@ -72,7 +72,7 @@ def split(restricted_vec:np.ndarray):
         if safety_counter > 100:
             #print(restricted_vec[0])
             raise Exception('Did not find suitable randomvalues')
-        indices_to_recompute = indices_to_recompute.reshape(-1)
+        indices_to_recompute = indices_to_recompute[0].reshape(-1)
         #print(f'\tRegenerate {indices_to_recompute.shape[0]} elements (from {restricted_vec.shape[0]})')
         a[indices_to_recompute] = np.random.uniform(-LIMIT, LIMIT,restricted_vec[indices_to_recompute].shape)
         b = restricted_vec - a
