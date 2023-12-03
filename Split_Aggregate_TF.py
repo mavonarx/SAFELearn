@@ -57,7 +57,6 @@ def restrict_values(vec:np.ndarray):
 
 
 def unrestrict_values(recovered_restricted_vec):
-    recovered_restricted_vec = recovered_restricted_vec.type(torch.FloatTensor)
     return recovered_restricted_vec / PUSH_FACTOR
 
 
