@@ -36,9 +36,12 @@ class Server(BaseFedarated):
         print('Training with {} workers ---'.format(self.clients_per_round))
         
         if os.path.exists(GLOBAL_MODEL_PATH):
+            hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            print(loaded_model)
-            self.latest_model = loaded_model
+            hetero_model.append(loaded_model[:100])
+            hetero_model.append(loaded_model[101])
+            print(hetero_model)
+            self.latest_model = hetero_model
 
         num_clients = len(self.clients)
         pk = np.ones(num_clients) * 1.0 / num_clients
