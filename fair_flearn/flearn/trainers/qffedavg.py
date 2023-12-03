@@ -59,6 +59,7 @@ class Server(BaseFedarated):
         #print(np.sum(np.array(num_correct_train)) * 1.0 / np.sum(np.array(num_train)), ",")
         #print(np.sum(np.array(num_correct_val)) * 1.0 / np.sum(np.array(num_val)), ",")
         
+        
         #if i % self.log_interval == 0 and i > int(self.num_rounds/2):      TODO make things append to file instead of writing new file
         test_accuracies = np.divide(np.asarray(num_correct_test), np.asarray(num_test))
         np.savetxt(self.output + "_" + str(comunication_index) + "_test.csv", test_accuracies, delimiter=",")

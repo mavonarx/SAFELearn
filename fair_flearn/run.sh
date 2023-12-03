@@ -12,6 +12,5 @@ python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
             --data_partition_seed=1 \
             --log_interval=10 \
             --static_step_size=0 \
-            --track_individual_accuracy=0 >> results.txt
-            #\
+            --track_individual_accuracy=0 #\
             #--output="./log_$1/$2_samp$5_run$3_q$4"
