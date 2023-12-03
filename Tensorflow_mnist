@@ -1,5 +1,22 @@
 import tensorflow as tf
 import tensorflow_datasets as tfds
+import sys
+
+# Change constants here
+###############################################################################
+MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
+LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
+Q_FACTOR = 1
+TORCHSEED = int(sys.argv[2])
+DEFAULT_DEVICE = "cpu"
+NUMBER_OF_CLIENTS =3
+PROJECT = "PPMI"
+INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
+MODEL_PATH= f"model/{PROJECT}/"
+GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
+N_EPOCHS = 50
+BATCH_SIZE = 64
+###############################################################################
 
 
 (ds_train, ds_test), ds_info = tfds.load(
@@ -41,10 +58,22 @@ model.compile(
 
 model.fit(
     ds_train,
-    epochs=6,
+    epochs=N_EPOCHS,
     validation_data=ds_test,
 )
 
+def get_one_vec_sorted_layers(model):
+    layer_names = model.keys()
+    size = 0
+    for name in layer_names:
+        size += model[name].view(-1).shape[0]
+        tf.tensor()
+    sum_var = torch.FloatTensor(size).fill_(0)
+    size = 0
+    for name in layer_names:
+        layer_as_vector = model[name].view(-1)
+        layer_width = layer_as_vector.shape[0]
+        sum_var[size:size + layer_width] = layer_as_vector
+        size += layer_width
+    return sum_var
 
-
-#model.graph  #.sess.run(tf.trainable_variables())
