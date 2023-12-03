@@ -148,7 +148,6 @@ def determine_aggregated_model(old_global_model_path, path_to_share1, path_to_sh
     share1 = np.loadtxt(path_to_share1, dtype=np.int64)
     share2 = np.loadtxt(path_to_share2, dtype=np.int64)
     restricted_vec = share1 + share2
-    
     unrestricted_vec = unrestrict_values(restricted_vec)
     np.savetxt(GLOBAL_MODEL_PATH, unrestricted_vec, fmt='%d') #used for debugging purposes 
     #return recover_model_from_vec(old_global_model, unrestricted_vec, layer_names)

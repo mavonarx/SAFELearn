@@ -36,7 +36,7 @@ class Server(BaseFedarated):
         print('Training with {} workers ---'.format(self.clients_per_round))
         
         if os.path.exists(GLOBAL_MODEL_PATH):
-            loaded_model = np.loadtxt(GLOBAL_MODEL_PATH)
+            loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
             print(loaded_model)
             self.latest_model = loaded_model
 
