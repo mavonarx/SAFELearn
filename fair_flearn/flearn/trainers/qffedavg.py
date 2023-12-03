@@ -38,7 +38,7 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            hetero_model.append(np.array(loaded_model[:100]))
+            hetero_model.append(np.array(loaded_model[:100]).reshape(100, 1))
             hetero_model.append(np.array(loaded_model[100]))
             print(hetero_model)
             self.latest_model = hetero_model
