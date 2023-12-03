@@ -67,6 +67,7 @@ def split(restricted_vec:np.ndarray):
     while True:
         indices_to_recompute = np.nonzero(np.abs(b) >= LIMIT)
         indices_to_recompute = indices_to_recompute[0]
+        print(indices_to_recompute)
         if len(indices_to_recompute) == 0:
             break
         if safety_counter > 100:
