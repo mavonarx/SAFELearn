@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /
 # Download ABY and SAFELearn
-RUN git clone https://github.com/encryptogroup/ABY.git && git clone https://github.com/mavonarx/SAFELearn.git
+RUN git clone --recursive https://github.com/encryptogroup/ABY.git && git clone https://github.com/mavonarx/SAFELearn.git
 
 # Compile ABY
 WORKDIR /ABY
