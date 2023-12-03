@@ -127,7 +127,6 @@ class BaseFedarated(object):
         '''
         num_clients = min(num_clients, len(self.clients))
         np.random.seed(round+4)
-        print(len(self.clients))
 
         
         if held_out: # meta-learning

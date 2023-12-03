@@ -54,10 +54,15 @@ class Server(BaseFedarated):
         tqdm.write('At round {} training accuracy: {}'.format(comunication_index, np.sum(np.array(num_correct_train)) * 1.0 / np.sum(np.array(num_train))))
         tqdm.write('At round {} validating accuracy: {}'.format(comunication_index, np.sum(np.array(num_correct_val)) * 1.0 / np.sum(np.array(num_val))))
         
+        if not os.path.exists("vehicle_stuff_to_cat"):
+            os.mkdir("vehicle_stuff_to_cat")
         #print(np.sum(np.array(num_correct_test)) * 1.0 / np.sum(np.array(num_test)), )
-        #np.savetxt("test.csv", np.sum(np.array(num_correct_test)) * 1.0 / np.sum(np.array(num_test)), delimiter=",")
+        np.savetxt("vehicle_stuff_to_cat/test.csv", np.sum(np.array(num_correct_test)) * 1.0 / np.sum(np.array(num_test)), delimiter=",")
         #print(np.sum(np.array(num_correct_train)) * 1.0 / np.sum(np.array(num_train)), ",")
+        np.savetxt("vehicle_stuff_to_cat/train.csv", np.sum(np.array(num_correct_train)) * 1.0 / np.sum(np.array(num_train)), delimiter=",")
         #print(np.sum(np.array(num_correct_val)) * 1.0 / np.sum(np.array(num_val)), ",")
+        np.savetxt("vehicle_stuff_to_cat/val.csv", np.sum(np.array(num_correct_val)) * 1.0 / np.sum(np.array(num_val)), delimiter=",")
+        
         
         
         #if i % self.log_interval == 0 and i > int(self.num_rounds/2):      TODO make things append to file instead of writing new file

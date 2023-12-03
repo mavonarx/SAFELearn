@@ -32,4 +32,8 @@ do
     ./fedavg_aggregation -q $MODE -r 1 -n 100 -d "PPMI"
     cd ..
     echo c | python Split_Aggregate_TF.py
+
+    cat fair_flearn/vehicle_stuff_to_cat/test.csv >> results.txt
+    cat fair_flearn/vehicle_stuff_to_cat/train.csv >> results.txt
+    cat fair_flearn/vehicle_stuff_to_cat/val.csv >> results.txt
 done
