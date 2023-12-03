@@ -36,8 +36,9 @@ def get_one_vec_sorted_layers(model):
     layer_names = model.keys()
     size = 0
     for name in layer_names:
-        size += model[name].reshape(-1).shape[0]
-    sum_var = np.array(size).fill_(0)
+        size += model[name].view(-1).shape[0]
+    sum_var = np.array(size).fill(0)
+
     size = 0
     for name in layer_names:
         layer_as_vector = model[name].reshape(-1)
@@ -49,7 +50,7 @@ def get_one_vec_sorted_layers(model):
 
 def restrict_values(vec:np.ndarray):
     vec = PUSH_FACTOR * vec
-    vec = (vec).round
+    vec = (vec).round()
     vec = np.clip(vec, -LIMIT, LIMIT)
     restricted_vec = vec
     return restricted_vec
@@ -61,7 +62,7 @@ def unrestrict_values(recovered_restricted_vec):
 
 
 def split(restricted_vec:np.ndarray):
-    a = np.random.rand(restricted_vec.shape) * LIMIT
+    a = np.random.rand(restricted_vec.shape[0]) * LIMIT
     b = restricted_vec - a
     safety_counter = 0
     while True:
@@ -91,7 +92,7 @@ def split_global_model(global_model_path):
     global_model = np.loadtxt(global_model_path)
     #global_model_as_vec = get_one_vec_sorted_layers(global_model)
     restricted_vec = restrict_values(global_model)    
-    np.savetxt(f'{SPLITTED_FILE_DIR}/global.txt', restricted_vec.numpy(), fmt='%d')
+    np.savetxt(f'{SPLITTED_FILE_DIR}/global.txt', restricted_vec, fmt='%d')
 
 
 def create_splits(global_model_path, local_model_paths, q=False):
@@ -101,7 +102,7 @@ def create_splits(global_model_path, local_model_paths, q=False):
         if q:
             delta_wk_h_np = np.loadtxt(path)
             delta_part = restrict_values(delta_wk_h_np[1:])
-            restricted_local_vec = (np.concatenate((delta_wk_h_np[0].numpy().reshape(1,),delta_part.numpy())))
+            restricted_local_vec = (np.concatenate((delta_wk_h_np[0].reshape(1,),delta_part)))
         else:
             local_model = torch.load(path)
             vec = get_one_vec_sorted_layers(local_model)
