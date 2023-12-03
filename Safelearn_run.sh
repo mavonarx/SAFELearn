@@ -2,13 +2,13 @@
 
 rm results.txt
 rm model/PPMI/GlobalModel.txt
-python PPMI_prediction_NN.py 2 999  >> results.txt
+
 
 # Change params here
 ##########################################################
 # mode 2 = Q-fed-avg, mode 1 = weighted-avg, mode 0 = normal avg
 MODE=2
-ROUNDS=2
+ROUNDS=5
 ##########################################################
 echo "SAFELearn" >> results.txt
 echo MODE = $MODE >> results.txt
@@ -24,7 +24,7 @@ for i in $(seq 1 ${ROUNDS});
 do
     echo $i >> results.txt
     cd fair_flearn
-    ./run.sh >> results.txt
+    ./run.sh 
     cd ..
     echo $SPLIT_STR | python Split_Aggregate_TF.py
     cd build
