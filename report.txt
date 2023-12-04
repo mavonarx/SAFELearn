@@ -1,0 +1,556 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 52 files
+Detected 3 issues that require attention
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+File: fair_flearn/flearn/models/sent140/stacked_lstm.py
+--------------------------------------------------------------------------------
+fair_flearn/flearn/models/sent140/stacked_lstm.py:61:12: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+--------------------------------------------------------------------------------
+File: fair_flearn/flearn/models/shakespeare/stacked_lstm.py
+--------------------------------------------------------------------------------
+fair_flearn/flearn/models/shakespeare/stacked_lstm.py:56:20: WARNING: tf.get_variable requires manual check. tf.get_variable returns ResourceVariables by default in 2.0, which have well-defined semantics and are stricter about shapes. You can disable this behavior by passing use_resource=False, or by calling tf.compat.v1.disable_resource_variables().
+fair_flearn/flearn/models/shakespeare/stacked_lstm.py:57:12: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+================================================================================
+Detailed log follows:
+
+================================================================================
+================================================================================
+Input tree: 'fair_flearn'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/main.py'
+ outputting to 'fair_flearn_v2/main.py'
+--------------------------------------------------------------------------------
+
+150:4: INFO: Renamed 'tf.logging.set_verbosity' to 'tf.compat.v1.logging.set_verbosity'
+150:29: INFO: Renamed 'tf.logging.WARN' to 'tf.compat.v1.logging.WARN'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/plot_efficiency.py'
+ outputting to 'fair_flearn_v2/plot_efficiency.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/plot_fairness.py'
+ outputting to 'fair_flearn_v2/plot_fairness.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/adult/create_dataset.py'
+ outputting to 'fair_flearn_v2/data/adult/create_dataset.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/fmnist/create_dataset.py'
+ outputting to 'fair_flearn_v2/data/fmnist/create_dataset.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/omniglot/generate_1623_dirs.py'
+ outputting to 'fair_flearn_v2/data/omniglot/generate_1623_dirs.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/omniglot/generate_data_mata_learning.py'
+ outputting to 'fair_flearn_v2/data/omniglot/generate_data_mata_learning.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/sent140/preprocess/combine_data.py'
+ outputting to 'fair_flearn_v2/data/sent140/preprocess/combine_data.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/sent140/preprocess/data_to_json.py'
+ outputting to 'fair_flearn_v2/data/sent140/preprocess/data_to_json.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/shakespeare/preprocess/gen_all_data.py'
+ outputting to 'fair_flearn_v2/data/shakespeare/preprocess/gen_all_data.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/shakespeare/preprocess/preprocess_shakespeare.py'
+ outputting to 'fair_flearn_v2/data/shakespeare/preprocess/preprocess_shakespeare.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/shakespeare/preprocess/shake_utils.py'
+ outputting to 'fair_flearn_v2/data/shakespeare/preprocess/shake_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/synthetic/generate_synthetic.py'
+ outputting to 'fair_flearn_v2/data/synthetic/generate_synthetic.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/synthetic_hybrid/generate_hybrid.py'
+ outputting to 'fair_flearn_v2/data/synthetic_hybrid/generate_hybrid.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/synthetic_iid/generate_iid.py'
+ outputting to 'fair_flearn_v2/data/synthetic_iid/generate_iid.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/data/vehicle/create_dataset.py'
+ outputting to 'fair_flearn_v2/data/vehicle/create_dataset.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/client.py'
+ outputting to 'fair_flearn_v2/flearn/models/client.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/adult/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/adult/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/adult/lr.py'
+ outputting to 'fair_flearn_v2/flearn/models/adult/lr.py'
+--------------------------------------------------------------------------------
+
+19:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+21:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+22:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+27:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+28:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+29:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+30:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+34:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+35:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+36:17: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+36:93: INFO: Multiplying scale arg of tf.contrib.layers.l2_regularizer by half to what tf.keras.regularizers.l2 expects.
+
+41:15: INFO: tf.losses.sparse_softmax_cross_entropy requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+41:15: INFO: Renamed 'tf.losses.sparse_softmax_cross_entropy' to 'tf.compat.v1.losses.sparse_softmax_cross_entropy'
+45:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+46:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+52:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+58:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/fmnist/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/fmnist/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/fmnist/lr.py'
+ outputting to 'fair_flearn_v2/flearn/models/fmnist/lr.py'
+--------------------------------------------------------------------------------
+
+19:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+21:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+22:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+27:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+28:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+29:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+30:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+34:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+35:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+36:17: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+36:93: INFO: Multiplying scale arg of tf.contrib.layers.l2_regularizer by half to what tf.keras.regularizers.l2 expects.
+
+41:15: INFO: tf.losses.sparse_softmax_cross_entropy requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+41:15: INFO: Renamed 'tf.losses.sparse_softmax_cross_entropy' to 'tf.compat.v1.losses.sparse_softmax_cross_entropy'
+45:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+46:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+52:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+58:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/omniglot/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/omniglot/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/omniglot/cnn.py'
+ outputting to 'fair_flearn_v2/flearn/models/omniglot/cnn.py'
+--------------------------------------------------------------------------------
+
+23:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+26:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+27:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+32:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+33:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+34:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+35:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+39:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+40:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+42:16: INFO: Renamed 'tf.layers.conv2d' to 'tf.compat.v1.layers.conv2d'
+48:16: INFO: Renamed 'tf.layers.max_pooling2d' to 'tf.compat.v1.layers.max_pooling2d'
+49:16: INFO: Renamed 'tf.layers.conv2d' to 'tf.compat.v1.layers.conv2d'
+55:16: INFO: Renamed 'tf.layers.max_pooling2d' to 'tf.compat.v1.layers.max_pooling2d'
+57:16: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+58:17: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+63:15: INFO: tf.losses.sparse_softmax_cross_entropy requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+63:15: INFO: Renamed 'tf.losses.sparse_softmax_cross_entropy' to 'tf.compat.v1.losses.sparse_softmax_cross_entropy'
+66:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+68:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+74:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+80:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/sent140/get_embs.py'
+ outputting to 'fair_flearn_v2/flearn/models/sent140/get_embs.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/sent140/stacked_lstm.py'
+ outputting to 'fair_flearn_v2/flearn/models/sent140/stacked_lstm.py'
+--------------------------------------------------------------------------------
+
+43:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+45:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+46:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+51:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+52:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+53:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+54:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+57:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+58:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+61:12: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+64:21: INFO: Renamed 'tf.nn.dynamic_rnn' to 'tf.compat.v1.nn.dynamic_rnn'
+65:14: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+66:15: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+67:30: INFO: Renamed 'tf.nn.softmax_cross_entropy_with_logits_v2' to 'tf.nn.softmax_cross_entropy_with_logits'
+70:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+73:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+80:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+86:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/shakespeare/stacked_lstm.py'
+ outputting to 'fair_flearn_v2/flearn/models/shakespeare/stacked_lstm.py'
+--------------------------------------------------------------------------------
+
+40:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+42:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+43:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+48:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+49:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+50:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+51:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+55:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+56:20: WARNING: tf.get_variable requires manual check. tf.get_variable returns ResourceVariables by default in 2.0, which have well-defined semantics and are stricter about shapes. You can disable this behavior by passing use_resource=False, or by calling tf.compat.v1.disable_resource_variables().
+56:20: INFO: Renamed 'tf.get_variable' to 'tf.compat.v1.get_variable'
+57:12: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+58:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+61:21: INFO: Renamed 'tf.nn.dynamic_rnn' to 'tf.compat.v1.nn.dynamic_rnn'
+62:15: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+64:30: INFO: Renamed 'tf.nn.softmax_cross_entropy_with_logits_v2' to 'tf.nn.softmax_cross_entropy_with_logits'
+68:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+71:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+79:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+85:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/synthetic/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/synthetic/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/synthetic/mclr.py'
+ outputting to 'fair_flearn_v2/flearn/models/synthetic/mclr.py'
+--------------------------------------------------------------------------------
+
+23:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+25:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+26:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+31:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+32:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+33:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+34:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+38:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+39:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+40:17: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+40:93: INFO: Multiplying scale arg of tf.contrib.layers.l2_regularizer by half to what tf.keras.regularizers.l2 expects.
+
+45:15: INFO: tf.losses.sparse_softmax_cross_entropy requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+45:15: INFO: Renamed 'tf.losses.sparse_softmax_cross_entropy' to 'tf.compat.v1.losses.sparse_softmax_cross_entropy'
+49:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+50:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+56:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+62:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/vehicle/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/models/vehicle/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/models/vehicle/svm.py'
+ outputting to 'fair_flearn_v2/flearn/models/vehicle/svm.py'
+--------------------------------------------------------------------------------
+
+19:12: INFO: Renamed 'tf.set_random_seed' to 'tf.compat.v1.set_random_seed'
+21:25: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+22:20: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+27:26: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+28:23: INFO: Renamed 'tf.RunMetadata' to 'tf.compat.v1.RunMetadata'
+29:19: INFO: Renamed 'tf.profiler.ProfileOptionBuilder' to 'tf.compat.v1.profiler.ProfileOptionBuilder'
+30:25: INFO: Renamed 'tf.profiler.profile' to 'tf.compat.v1.profiler.profile'
+34:19: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+35:17: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+45:73: INFO: Renamed 'tf.train.get_global_step' to 'tf.compat.v1.train.get_global_step'
+46:26: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+52:27: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+58:41: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/afl.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/afl.py'
+--------------------------------------------------------------------------------
+
+13:25: INFO: Renamed 'tf.train.AdagradOptimizer' to 'tf.compat.v1.train.AdagradOptimizer'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/fedbase.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/fedbase.py'
+--------------------------------------------------------------------------------
+
+15:8: INFO: Renamed 'tf.reset_default_graph' to 'tf.compat.v1.reset_default_graph'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/maml.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/maml.py'
+--------------------------------------------------------------------------------
+
+14:25: INFO: Renamed 'tf.train.GradientDescentOptimizer' to 'tf.compat.v1.train.GradientDescentOptimizer'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/qffedavg.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/qffedavg.py'
+--------------------------------------------------------------------------------
+
+13:25: INFO: Renamed 'tf.train.GradientDescentOptimizer' to 'tf.compat.v1.train.GradientDescentOptimizer'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/trainers/qffedsgd.py'
+ outputting to 'fair_flearn_v2/flearn/trainers/qffedsgd.py'
+--------------------------------------------------------------------------------
+
+13:25: INFO: Renamed 'tf.train.GradientDescentOptimizer' to 'tf.compat.v1.train.GradientDescentOptimizer'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/__init__.py'
+ outputting to 'fair_flearn_v2/flearn/utils/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/language_utils.py'
+ outputting to 'fair_flearn_v2/flearn/utils/language_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/model_utils.py'
+ outputting to 'fair_flearn_v2/flearn/utils/model_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/python_utils.py'
+ outputting to 'fair_flearn_v2/flearn/utils/python_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/tf_utils.py'
+ outputting to 'fair_flearn_v2/flearn/utils/tf_utils.py'
+--------------------------------------------------------------------------------
+
+34:13: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/flearn/utils/utils.py'
+ outputting to 'fair_flearn_v2/flearn/utils/utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/__init__.py'
+ outputting to 'fair_flearn_v2/utils/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/language_utils.py'
+ outputting to 'fair_flearn_v2/utils/language_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/model_utils.py'
+ outputting to 'fair_flearn_v2/utils/model_utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/remove_users.py'
+ outputting to 'fair_flearn_v2/utils/remove_users.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/sample.py'
+ outputting to 'fair_flearn_v2/utils/sample.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/split_data.py'
+ outputting to 'fair_flearn_v2/utils/split_data.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/stats.py'
+ outputting to 'fair_flearn_v2/utils/stats.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/tf_utils.py'
+ outputting to 'fair_flearn_v2/utils/tf_utils.py'
+--------------------------------------------------------------------------------
+
+33:13: INFO: Renamed 'tf.trainable_variables' to 'tf.compat.v1.trainable_variables'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'fair_flearn/utils/utils.py'
+ outputting to 'fair_flearn_v2/utils/utils.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+

@@ -1,0 +1,5 @@
+Q_FACTOR  1 , TORCHSEED  999 , Nr. of Clients  3 , N_EPOCHS  300 , Batch Size  64 LIPSCHITZ: 1000
+SAFELearn
+MODE = 2
+ROUNDS = 2
+1

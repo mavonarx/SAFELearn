@@ -9,6 +9,7 @@ import sklearn.metrics as sklm
 import os
 import glob
 from torcheval.metrics.functional import multiclass_f1_score, multiclass_auroc
+from sklearn.metrics import accuracy_score
 
 import sys
 np.set_printoptions(threshold=sys.maxsize)
@@ -16,8 +17,8 @@ np.set_printoptions(threshold=sys.maxsize)
 # Change constants here
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
-LIPSCHITZCONSTANT = 1  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 0
+LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
+Q_FACTOR = 1
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -46,7 +47,7 @@ if not os.path.exists(MODEL_PATH):
         os.mkdir(MODEL_PATH)
 ###############################################################################
 if (MODE == 2):
-    print("Q_FACTOR ",Q_FACTOR , ", TORCHSEED ",  TORCHSEED , ", Nr. of Clients ", NUMBER_OF_CLIENTS, ", N_EPOCHS ", N_EPOCHS, ", Batch Size ", BATCH_SIZE)
+    print("Q_FACTOR ",Q_FACTOR , ", TORCHSEED ",  TORCHSEED , ", Nr. of Clients ", NUMBER_OF_CLIENTS, ", N_EPOCHS ", N_EPOCHS, ", Batch Size ", BATCH_SIZE, "LIPSCHITZ:", LIPSCHITZCONSTANT)
     exit()
 
 # initalized an np array for storing the loss of each clients data in respect to the current global model without training of the client itself. 
@@ -115,6 +116,7 @@ def eval_model(model, X_test, y_test):
         #print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
+        print ("The accuracy is", accuracy_score(y_test, np.argmax(y_pred, axis=1)))
         print("F1 Score:", f1)
         print("AUROC:", auroc)
         
