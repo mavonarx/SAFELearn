@@ -36,10 +36,9 @@ class Model(object):
 
     def create_model(self, q, optimizer): # tried to rebuild ou own PPMI NN in TF
         """Model function for NN."""
-        features = tf.compat.v1.placeholder(tf.float32, shape=[12], name='features')
+        features = tf.compat.v1.placeholder(tf.float32, shape=[None, 12], name='features')
         labels = tf.compat.v1.placeholder(tf.int64, shape=[None], name='labels')
-        input_layer = tf.reshape(features, [12])
-        input_layer = features
+        input_layer = tf.reshape(features, (-1,1))
         dense1 = tf.compat.v1.layers.dense(inputs=input_layer, units=20,activation=tf.nn.relu)
         dense2 = tf.compat.v1.layers.dense(inputs=dense1, units=15,activation=tf.nn.relu)
         dense3 = tf.compat.v1.layers.dense(inputs=dense2, units=12,activation=tf.nn.relu)
