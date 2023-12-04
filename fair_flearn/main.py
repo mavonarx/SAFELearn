@@ -10,7 +10,7 @@ from flearn.utils.model_utils import read_data
 OPTIMIZERS = ['qffedsgd', 'qffedavg', 'afl', 'maml']
 DATASETS = [ 'synthetic', 'vehicle', 'sent140', 'shakespeare',
 'synthetic_iid', 'synthetic_hybrid', 
-'fmnist', 'adult', 'omniglot']   # fmnist: fashion mnist used in the AFL paper
+'fmnist', 'adult', 'omniglot', 'ppmi']   # fmnist: fashion mnist used in the AFL paper
 
 
 MODEL_PARAMS = {
@@ -22,6 +22,7 @@ MODEL_PARAMS = {
     'shakespeare.stacked_lstm': (80, 80, 256), # seq_len, num_class num_hidden
     'synthetic.mclr': (10, ), # num_classes
     'vehicle.svm':(2, ), # num_classes
+    'ppmi.NN':(12,), #num_classes
 }
 
 

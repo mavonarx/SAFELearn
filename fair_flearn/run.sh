@@ -1,4 +1,4 @@
-python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
+python3  -u main.py --dataset=ppmi --optimizer=qffedavg  \
             --learning_rate=0.01 \
             --learning_rate_lambda=0.01 \
             --num_rounds=1 \
@@ -6,7 +6,7 @@ python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
             --clients_per_round=10 \
             --batch_size=64 \
             --q=1 \
-            --model='svm' \
+            --model='PPMI_TF_NN.py' \
             --sampling=1  \
             --num_epochs=10 \
             --data_partition_seed=1 \
