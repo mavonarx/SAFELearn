@@ -6,6 +6,7 @@ from numpy import *
 import pandas as pd
 import torch.utils.data as data
 import torch
+from json import JSONEncoder
 
 NUM_USER = 5
 torch.manual_seed(42)
@@ -41,34 +42,31 @@ def generate_data():
     X = []
     y = []
     mat = pd.read_csv('./raw_data/PPMI_cleaned_altered.csv')
-    mat = torch.Tensor(mat.to_numpy())
+    #mat = torch.Tensor(mat.to_numpy())
+    mat = mat.to_numpy()
     mat = create_users(mat)
-    raw_y = []
-    raw_x = []
+    raw_y = [[],[],[],[],[]]
+    raw_x = [[],[],[],[],[]]
     
     for i in range(NUM_USER):
-        #raw_x[i] = mat[i][:][2:]
-        #raw_y[i] = mat[i][:][1]
-        raw_x.append(mat[i][:][2:])
-    print(len(raw_x))
-    print(len(raw_x[0]))
-    print(len(raw_x[0][0]))
-
+        for index in mat[i].indices:
+            raw_x[i].append(mat[i].dataset[index][2:])
+            raw_y[i].append(mat[i].dataset[index][1])
 
     print("number of users:", len(raw_x), len(raw_y))
-    print("number of features:", len(raw_x[0][0][0]))
+    print("number of features:", len(raw_x[0][0]))
 
     
     for i in range(NUM_USER):
-        print("{}-th user has {} samples".format(i, len(raw_x[i][0])))
+        print("{}-th user has {} samples".format(i, len(raw_x[i])))
         #print(len(raw_x[i][0]) * 0.75)
-        X.append(preprocess(raw_x[i][0]).tolist())
-        y.append(raw_y[i].tolist())
+        X.append((raw_x[i]))
+        y.append(raw_y[i])
         num = 0
-        for j in range(len(raw_y[i][0])):
-            if raw_y[i][0][j] == 1:
+        for j in range(len(raw_y[i])):
+            if raw_y[i][j] == 1:
                 num += 1
-        print("ratio, ", num * 1.0 / len(raw_y[i][0]))
+        print("ratio, ", num * 1.0 / len(raw_y[i]))
     return X, y
     
 
@@ -84,7 +82,7 @@ def main():
 
     X, y = generate_data()
 
-    
+
     # Create data structure
     train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
     test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
@@ -105,12 +103,18 @@ def main():
         test_data['users'].append(uname)
         test_data['user_data'][uname] = {'x': X[i][train_len:], 'y': y[i][train_len:]}
         test_data['num_samples'].append(test_len)
-    
+        
+        
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return json.JSONEncoder.default(self, obj)
 
     with open(train_path,'w') as outfile:
-        json.dump(train_data, outfile)
+        json.dump(train_data, outfile, cls=NumpyEncoder)
     with open(test_path, 'w') as outfile:
-        json.dump(test_data, outfile)
+        json.dump(test_data, outfile, cls=NumpyEncoder)
     
 
 if __name__ == "__main__":
