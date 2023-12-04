@@ -7,6 +7,7 @@ import pandas as pd
 import torch.utils.data as data
 import torch
 from json import JSONEncoder
+import os
 
 NUM_USER = 5
 torch.manual_seed(42)
@@ -72,6 +73,8 @@ def generate_data():
 
 def main():
 
+    os.makedirs("data/train",exist_ok=True)
+    os.makedirs("data/test",exist_ok=True)
 
     train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
     test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
