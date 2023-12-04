@@ -6,7 +6,7 @@ python3  -u main.py --dataset=ppmi --optimizer=qffedavg  \
             --clients_per_round=10 \
             --batch_size=64 \
             --q=1 \
-            --model='PPMI_TF_NN.py' \
+            --model='PPMI_TF_NN' \
             --sampling=1  \
             --num_epochs=10 \
             --data_partition_seed=1 \
