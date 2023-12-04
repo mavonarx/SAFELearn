@@ -22,7 +22,7 @@ MODEL_PARAMS = {
     'shakespeare.stacked_lstm': (80, 80, 256), # seq_len, num_class num_hidden
     'synthetic.mclr': (10, ), # num_classes
     'vehicle.svm':(2, ), # num_classes
-    'ppmi.NN':(12,), #num_classes
+    'ppmi.PPMI_TF_NN':(12,), #num_classes
 }
 
 
@@ -127,6 +127,7 @@ def read_options():
         model_path = '%s.%s.%s.%s' % ('flearn', 'models', parsed['dataset'], parsed['model'])
 
     mod = importlib.import_module(model_path)
+    print()
     learner = getattr(mod, 'Model')
 
     # load selected trainer
