@@ -31,9 +31,8 @@ def create_users(fullset:pd.DataFrame):
     for i in range(NUM_USER):
         splits.append(num_samples_client)
     a,s,d,f,g = data.random_split(fullset, splits, generator=generator)
-    array_of_users = [a,s,d,f,g]
-    print(array_of_users[1][0][0])
-    return array_of_users
+    x = [a,s,d,f,g]
+    return x
     
     
     
@@ -46,17 +45,22 @@ def generate_data():
     mat = create_users(mat)
     raw_y = []
     raw_x = []
+    
     for i in range(NUM_USER):
-        raw_x.append(mat[i].dataset[:, 2:])
-        raw_y.append(mat[i].dataset[:, 1])
+        #raw_x[i] = mat[i][:][2:]
+        #raw_y[i] = mat[i][:][1]
+        raw_x.append(mat[i][:][2:])
+    print(len(raw_x))
     print(len(raw_x[0]))
+    print(len(raw_x[0][0]))
+
 
     print("number of users:", len(raw_x), len(raw_y))
-    print("number of features:", len(raw_x[0][0]))
+    print("number of features:", len(raw_x[0][0][0]))
 
     
     for i in range(NUM_USER):
-        print("{}-th user has {} samples".format(i, len(raw_x[i][0][0])))
+        print("{}-th user has {} samples".format(i, len(raw_x[i][0])))
         #print(len(raw_x[i][0]) * 0.75)
         X.append(preprocess(raw_x[i][0]).tolist())
         y.append(raw_y[i].tolist())
