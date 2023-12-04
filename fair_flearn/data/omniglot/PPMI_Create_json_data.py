@@ -2,7 +2,6 @@ import scipy.io
 import numpy as np
 import random
 import json
-from numpy import *
 import pandas as pd
 import torch.utils.data as data
 import torch
@@ -23,33 +22,56 @@ def preprocess(x):
     x[where_are_NaNs] = 0
     return x
 
-def create_users(fullset:pd.DataFrame):
-    
-    num_samples_client = 1.0/NUM_USER
-    
+def my_random_split(dataset, num_splits):
     splits = []
-    for i in range(NUM_USER):
-        splits.append(num_samples_client)
-    a,s,d,f,g = data.random_split(fullset, splits, generator=generator)
-    array_of_users = [a,s,d,f,g]
-    print(array_of_users[1][0][0])
+    for i in range(num_splits):
+        splits.append([])
+    used_len = len(dataset) - len(dataset)%num_splits
+    unused = []
+    for i in range(used_len):
+        unused.append(i)
+
+    while(len(unused)>0):
+        for i in range(num_splits):
+            random_index = random.randint(0, len(unused)-1)
+            item = unused[random_index]
+            splits[i].append(dataset[item])
+            unused.remove(item)
+    print(splits)
+    return splits
+
+def create_users(fullset):
+    num_samples_client = 1/NUM_USER
+    
+    splits = [num_samples_client] * NUM_USER 
+
+    print(splits)
+    #array_of_users= data.random_split(fullset, splits, generator=generator)
+    array_of_users = my_random_split(fullset, NUM_USER)
+    print("how many users?", len(array_of_users))
+    for i in range(len(array_of_users)): 
+        print(array_of_users[i])
     return array_of_users
     
     
-    
+
+
 
 def generate_data():
     X = []
     y = []
-    mat = pd.read_csv('./raw_data/PPMI_cleaned_altered.csv')
+    mat = pd.read_csv('./raw_data/test.csv')
     mat = torch.Tensor(mat.to_numpy())
     mat = create_users(mat)
     raw_y = []
     raw_x = []
     for i in range(NUM_USER):
-        raw_x.append(mat[i].dataset[:, 2:])
-        raw_y.append(mat[i].dataset[:, 1])
-    print(len(raw_x[0]))
+        print(mat[i])
+        raw_x.append(mat[i][:, 2:])
+        raw_y.append(mat[i][:, 1])
+    print("raw_data x_0", raw_x[0])
+    print("rows?", len(raw_x[0]))
+    print("columns?", len(raw_x[0][0]))
 
     print("number of users:", len(raw_x), len(raw_y))
     print("number of features:", len(raw_x[0][0]))
