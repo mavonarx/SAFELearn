@@ -100,6 +100,7 @@ class Server(BaseFedarated):
             files_to_delete = glob.glob(file_pattern)
             for file in files_to_delete:
                 os.remove(file)
+        os.makedirs(f"{MODEL_PATH}", exist_ok=True);
         delete_files(f"{MODEL_PATH}_Delta*")
         for client_index, c in enumerate(selected_clients):
             Deltas = []

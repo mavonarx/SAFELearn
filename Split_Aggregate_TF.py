@@ -100,6 +100,7 @@ def create_splits(global_model_path, local_model_paths, q=False):
     for i, path in enumerate(local_model_paths):
         vec = ""
         if q:
+            print(delta_wk_h_np)
             delta_wk_h_np = np.loadtxt(path)
             delta_part = restrict_values(delta_wk_h_np[1:])
             restricted_local_vec = (np.concatenate((delta_wk_h_np[0].reshape(1,),delta_part)))
