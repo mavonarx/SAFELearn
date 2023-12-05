@@ -3,7 +3,7 @@ python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
             --learning_rate_lambda=0.01 \
             --num_rounds=1 \
             --eval_every=1 \
-            --clients_per_round=10 \
+            --clients_per_round=3 \
             --batch_size=64 \
             --q=1 \
             --model='PPMI_TF_NN' \
