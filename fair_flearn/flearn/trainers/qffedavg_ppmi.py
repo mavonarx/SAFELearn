@@ -117,7 +117,6 @@ class Server(BaseFedarated):
                                      Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,), Deltas[0][7].reshape(-1,), Deltas[0][8].reshape(-1,), Deltas[0][9].reshape(-1,)))
             weights_before = np.concatenate((weights_before[0][0].ravel().reshape(-1,), weights_before[0][1].ravel().reshape(-1,), weights_before[0][2].reshape(-1,), weights_before[0][3].reshape(-1,), weights_before[0][4].reshape(-1,), 
                                             weights_before[0][5].reshape(-1,), weights_before[0][6].reshape(-1,), weights_before[0][7].reshape(-1,), weights_before[0][8].reshape(-1,), weights_before[0][9].reshape(-1,)))
-            weights_before = weights_before.ravel()
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
             combined = np.concatenate((np.array(hs), Deltas))
