@@ -28,7 +28,7 @@ BATCH_SIZE = 64
 # [12,20], [20,] -> weights of first and second layer and biases of second layer
 # [20,15], [15,] -> weights of second and third layer and biases of third layer
 # [15,12], [12,] -> weights of third and fourth layer and biases of fourth layer
-#
+# [12,4], [4,] -> weights of fourth and fifth layer and biases of fifth layer
 #
 #
 ###############################################################################
@@ -96,10 +96,10 @@ class Server(BaseFedarated):
             if (client_index == 0):
                 
                 print(weights_before, "entire weights/bias of model") 
-                print(weights_before[6].shape, "shape of selected array") 
-                print(weights_before[6], "entry of chosen array") 
-                print(weights_before[7].shape, "shape of selected array") 
-                print(weights_before[7], "entry of chosen array") 
+                print(weights_before[8].shape, "shape of selected array") 
+                print(weights_before[8], "entry of chosen array") 
+                print(weights_before[9].shape, "shape of selected array") 
+                print(weights_before[9], "entry of chosen array") 
             loss = c.get_loss() # compute loss on the whole training data, with respect to the starting point (the global model)
             soln, stats = c.solve_inner(num_epochs=self.num_epochs, batch_size=self.batch_size)
             new_weights = soln[1]
