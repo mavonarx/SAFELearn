@@ -90,7 +90,6 @@ class Server(BaseFedarated):
         for client_index, c in enumerate(selected_clients):
             Deltas = []
             hs = []
-            weights_before_test =[]
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
@@ -108,14 +107,12 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
-            weights_before_test.append([u * 1.0 for u in weights_before])
-            
             
             
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
                                      Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,), Deltas[0][7].reshape(-1,), Deltas[0][8].reshape(-1,), Deltas[0][9].reshape(-1,)))
-            weights_before = np.concatenate((weights_before[0].ravel().reshape(-1,), weights_before[0][1].ravel().reshape(-1,)))
+            weights_before = np.concatenate((weights_before[0].ravel().reshape(-1,), weights_before[0][1].ravel().reshape(-1,), weights_before[1].ravel().reshape(-1,), weights_before[1][1].ravel().reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
             combined = np.concatenate((np.array(hs), Deltas))
