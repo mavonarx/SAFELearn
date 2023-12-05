@@ -84,8 +84,10 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            print(weights_before) 
-            print(weights_before.shape) 
+            if (client_index == 0):
+                
+                print(weights_before) 
+                print(weights_before[0].shape) 
             loss = c.get_loss() # compute loss on the whole training data, with respect to the starting point (the global model)
             soln, stats = c.solve_inner(num_epochs=self.num_epochs, batch_size=self.batch_size)
             new_weights = soln[1]
