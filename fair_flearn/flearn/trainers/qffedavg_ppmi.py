@@ -48,7 +48,7 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            #print("LOADED_MODEL = ", loaded_model)
+            print("LOADED_MODEL = ", loaded_model)
             hetero_model.append(np.array(loaded_model[:240], dtype=np.float32).reshape(12, 20)) # TODO when to use (xxx,1) and when to use (xxx,)
             hetero_model.append(np.array(loaded_model[240:260], dtype=np.float32).reshape(20,))
             hetero_model.append(np.array(loaded_model[260:560], dtype=np.float32).reshape(20,15))
