@@ -108,7 +108,7 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
-            weights_before_test.append([u * 1.0 for u in zip(weights_before)])
+            weights_before_test.append([u * 1.0 for u in weights_before])
             print(weights_before_test.shape, "entire model's shape \n") 
             print(weights_before_test, "entire model \n") 
             
