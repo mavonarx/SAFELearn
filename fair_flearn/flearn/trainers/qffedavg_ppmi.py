@@ -47,8 +47,16 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            hetero_model.append(np.array(loaded_model[:100]).reshape(100, 1))
-            hetero_model.append(np.array(loaded_model[100]).reshape(1,))
+            hetero_model.append(np.array(loaded_model[:240]).reshape(240, 1)) # TODO when to use (xxx,1) and when to use (xxx,)
+            hetero_model.append(np.array(loaded_model[240:260]).reshape(20,1))
+            hetero_model.append(np.array(loaded_model[260:560]).reshape(300,1))
+            hetero_model.append(np.array(loaded_model[560:575]).reshape(15,1))
+            hetero_model.append(np.array(loaded_model[575:755]).reshape(180,1))
+            hetero_model.append(np.array(loaded_model[755:767]).reshape(12,1))
+            hetero_model.append(np.array(loaded_model[767:815]).reshape(48,1))
+            hetero_model.append(np.array(loaded_model[815:819]).reshape(4,1))
+            hetero_model.append(np.array(loaded_model[819:831]).reshape(12,1))
+            hetero_model.append(np.array(loaded_model[831:834]).reshape(3,1))
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
