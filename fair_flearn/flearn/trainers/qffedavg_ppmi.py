@@ -48,6 +48,7 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
+            #print("LOADED_MODEL = ", loaded_model)
             hetero_model.append(np.array(loaded_model[:240], dtype=np.float32).reshape(12, 20)) # TODO when to use (xxx,1) and when to use (xxx,)
             hetero_model.append(np.array(loaded_model[240:260], dtype=np.float32).reshape(20,))
             hetero_model.append(np.array(loaded_model[260:560], dtype=np.float32).reshape(20,15))
@@ -58,7 +59,7 @@ class Server(BaseFedarated):
             hetero_model.append(np.array(loaded_model[815:819], dtype=np.float32).reshape(4,))
             hetero_model.append(np.array(loaded_model[819:831], dtype=np.float32).reshape(4,3))
             hetero_model.append(np.array(loaded_model[831:834], dtype=np.float32).reshape(3,))
-            print("HETERO_MODEL = ", hetero_model)
+            #print("HETERO_MODEL = ", hetero_model)
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
@@ -108,8 +109,8 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            if (client_index == 0):
-                print(weights_before, "entire weights/bias of model") 
+            #if (client_index == 0):
+            #    print(weights_before, "entire weights/bias of model") 
             #    print(weights_before[8].shape, "shape of selected array") 
             #    print(weights_before[8], "entry of chosen array") 
             #    print(weights_before[9].shape, "shape of selected array") 
@@ -122,6 +123,7 @@ class Server(BaseFedarated):
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
             
+            #print(new_weights, "new_weights")
 
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
