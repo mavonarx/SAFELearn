@@ -48,16 +48,16 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            hetero_model.append(np.array(loaded_model[:240]).reshape(12, 20)) # TODO when to use (xxx,1) and when to use (xxx,)
-            hetero_model.append(np.array(loaded_model[240:260]).reshape(20,))
-            hetero_model.append(np.array(loaded_model[260:560]).reshape(20,15))
-            hetero_model.append(np.array(loaded_model[560:575]).reshape(15,))
-            hetero_model.append(np.array(loaded_model[575:755]).reshape(15,12))
-            hetero_model.append(np.array(loaded_model[755:767]).reshape(12,))
-            hetero_model.append(np.array(loaded_model[767:815]).reshape(12,4))
-            hetero_model.append(np.array(loaded_model[815:819]).reshape(4,))
-            hetero_model.append(np.array(loaded_model[819:831]).reshape(4,3))
-            hetero_model.append(np.array(loaded_model[831:834]).reshape(3,))
+            hetero_model.append(np.array(loaded_model[:240], dtype=np.float32).reshape(12, 20)) # TODO when to use (xxx,1) and when to use (xxx,)
+            hetero_model.append(np.array(loaded_model[240:260], dtype=np.float32).reshape(20,))
+            hetero_model.append(np.array(loaded_model[260:560], dtype=np.float32).reshape(20,15))
+            hetero_model.append(np.array(loaded_model[560:575], dtype=np.float32).reshape(15,))
+            hetero_model.append(np.array(loaded_model[575:755], dtype=np.float32).reshape(15,12))
+            hetero_model.append(np.array(loaded_model[755:767], dtype=np.float32).reshape(12,))
+            hetero_model.append(np.array(loaded_model[767:815], dtype=np.float32).reshape(12,4))
+            hetero_model.append(np.array(loaded_model[815:819], dtype=np.float32).reshape(4,))
+            hetero_model.append(np.array(loaded_model[819:831], dtype=np.float32).reshape(4,3))
+            hetero_model.append(np.array(loaded_model[831:834], dtype=np.float32).reshape(3,))
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
