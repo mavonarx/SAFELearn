@@ -29,8 +29,8 @@ BATCH_SIZE = 64
 # [20,15], [15,] -> weights of second and third layer and biases of third layer
 # [15,12], [12,] -> weights of third and fourth layer and biases of fourth layer
 # [12,4], [4,] -> weights of fourth and fifth layer and biases of fifth layer
-#
-#
+# [4,3], [3,] -> weights of fifth and last layer and biases of last layer
+# entire thing is dtype = float32 TODO this might be bad
 ###############################################################################
 
 
@@ -93,13 +93,13 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            if (client_index == 0):
-                
-                print(weights_before, "entire weights/bias of model") 
-                print(weights_before[8].shape, "shape of selected array") 
-                print(weights_before[8], "entry of chosen array") 
-                print(weights_before[9].shape, "shape of selected array") 
-                print(weights_before[9], "entry of chosen array") 
+            #if (client_index == 0):
+            #    
+            #    print(weights_before, "entire weights/bias of model") 
+            #    print(weights_before[8].shape, "shape of selected array") 
+            #    print(weights_before[8], "entry of chosen array") 
+            #    print(weights_before[9].shape, "shape of selected array") 
+            #    print(weights_before[9], "entry of chosen array") 
             loss = c.get_loss() # compute loss on the whole training data, with respect to the starting point (the global model)
             soln, stats = c.solve_inner(num_epochs=self.num_epochs, batch_size=self.batch_size)
             new_weights = soln[1]
@@ -107,15 +107,21 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
-            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,)))
-            weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
+            
+            # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
+            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
+                                     Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,), Deltas[0][7].reshape(-1,), Deltas[0][8].reshape(-1,), Deltas[0][9].reshape(-1,)))
+            weights_before = np.concatenate((weights_before[0][0].reshape(-1,), weights_before[0][1].reshape(-1,), weights_before[0][2].reshape(-1,), weights_before[0][3].reshape(-1,), weights_before[0][4].reshape(-1,), 
+                                            weights_before[0][5].reshape(-1,), weights_before[0][6].reshape(-1,), weights_before[0][7].reshape(-1,), weights_before[0][8].reshape(-1,), weights_before[0][9].reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
-        
+            if (client_index == 0):
+                print(Deltas, "entire deltas \n")
+                print(Deltas.shape, "shape of entire deltas \n")
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
 
-        
+        print(weights_before, "entire model as one linear array... hopefully \n") 
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
         
