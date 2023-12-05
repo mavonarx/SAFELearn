@@ -122,7 +122,7 @@ class Server(BaseFedarated):
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
             
-            print(new_weights, "new_weights")
+            #print(new_weights, "new_weights")
 
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
