@@ -24,6 +24,15 @@ GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
 N_EPOCHS = 5
 BATCH_SIZE = 64
 ###############################################################################
+# Dimension of the arrays in order:
+# [12,20], 
+#
+#
+#
+#
+#
+###############################################################################
+
 
 
 class Server(BaseFedarated):
@@ -86,8 +95,9 @@ class Server(BaseFedarated):
             weights_before = c.get_params()
             if (client_index == 0):
                 
-                print(weights_before) 
-                print(weights_before[0].shape) 
+                print(weights_before, "entire weights/bias of model") 
+                print(weights_before[1].shape, "shape of selected array") 
+                print(weights_before[1], "entry of chosen array") 
             loss = c.get_loss() # compute loss on the whole training data, with respect to the starting point (the global model)
             soln, stats = c.solve_inner(num_epochs=self.num_epochs, batch_size=self.batch_size)
             new_weights = soln[1]
