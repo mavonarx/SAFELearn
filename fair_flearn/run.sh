@@ -8,7 +8,7 @@ python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
             --q=1 \
             --model='PPMI_TF_NN' \
             --sampling=1  \
-            --num_epochs=10 \
+            --num_epochs=100 \
             --data_partition_seed=1 \
             --log_interval=10 \
             --static_step_size=0 \
