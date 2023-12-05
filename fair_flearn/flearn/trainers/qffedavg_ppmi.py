@@ -93,9 +93,8 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            #if (client_index == 0):
-            #    
-            #    print(weights_before, "entire weights/bias of model") 
+            if (client_index == 0):
+                print(weights_before, "entire weights/bias of model") 
             #    print(weights_before[8].shape, "shape of selected array") 
             #    print(weights_before[8], "entry of chosen array") 
             #    print(weights_before[9].shape, "shape of selected array") 
@@ -108,7 +107,7 @@ class Server(BaseFedarated):
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
             
-            
+
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
                                      Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,), Deltas[0][7].reshape(-1,), Deltas[0][8].reshape(-1,), Deltas[0][9].reshape(-1,)))
@@ -127,7 +126,7 @@ class Server(BaseFedarated):
         # aggregate using the dynamic step-size
         #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
 
-                    
+
 
 
 
