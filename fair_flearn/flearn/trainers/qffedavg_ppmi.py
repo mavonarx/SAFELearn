@@ -93,9 +93,9 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            if (client_index == 0):
-                
-                print(weights_before, "entire weights/bias of model") 
+            #if (client_index == 0):
+            #    
+            #    print(weights_before, "entire weights/bias of model") 
             #    print(weights_before[8].shape, "shape of selected array") 
             #    print(weights_before[8], "entry of chosen array") 
             #    print(weights_before[9].shape, "shape of selected array") 
@@ -119,6 +119,7 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
 
         print(weights_before.shape, "entire model's shape \n") 
+        print(weights_before, "entire model \n") 
         
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
