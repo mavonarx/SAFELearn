@@ -115,13 +115,11 @@ class Server(BaseFedarated):
                                             weights_before[0][5].reshape(-1,), weights_before[0][6].reshape(-1,), weights_before[0][7].reshape(-1,), weights_before[0][8].reshape(-1,), weights_before[0][9].reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
-            if (client_index == 0):
-                print(Deltas, "entire deltas \n")
-                print(Deltas.shape, "shape of entire deltas \n")
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
 
-        print(weights_before, "entire model as one linear array... hopefully \n") 
+        print(weights_before.shape, "entire model's shape \n") 
+        
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
         
