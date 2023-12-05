@@ -111,9 +111,9 @@ class Server(BaseFedarated):
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
                                      Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,), Deltas[0][7].reshape(-1,), Deltas[0][8].reshape(-1,), Deltas[0][9].reshape(-1,)))
-            weights_before = np.concatenate((weights_before[0].ravel()).reshape(-1,),  weights_before[1].ravel().reshape(-1,), weights_before[2].ravel().reshape(-1,), weights_before[3].ravel().reshape(-1,)
+            weights_before = np.concatenate((weights_before[0].ravel().reshape(-1,),  weights_before[1].ravel().reshape(-1,), weights_before[2].ravel().reshape(-1,), weights_before[3].ravel().reshape(-1,)
                                             , weights_before[4].ravel().reshape(-1,), weights_before[5].ravel().reshape(-1,), weights_before[6].ravel().reshape(-1,), weights_before[7].ravel().reshape(-1,), 
-                                            weights_before[8].ravel().reshape(-1,), weights_before[9].ravel().reshape(-1,))
+                                            weights_before[8].ravel().reshape(-1,), weights_before[9].ravel().reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
             combined = np.concatenate((np.array(hs), Deltas))
