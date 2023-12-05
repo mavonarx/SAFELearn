@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import trange, tqdm
 import tensorflow as tf
 import sys as sys
+import glob
 
 from .fedbase import BaseFedarated
 from flearn.utils.tf_utils import process_grad, cosine_sim, softmax, norm_grad
@@ -94,7 +95,11 @@ class Server(BaseFedarated):
         indices, selected_clients = self.select_clients(round=comunication_index, pk=pk, num_clients=self.clients_per_round)
 
         selected_clients = selected_clients.tolist()
-        
+        def delete_files(file_pattern):
+            files_to_delete = glob.glob(file_pattern)
+            for file in files_to_delete:
+                os.remove(file)
+        delete_files(f"{MODEL_PATH}_Delta*")
         for client_index, c in enumerate(selected_clients):
             Deltas = []
             hs = []
