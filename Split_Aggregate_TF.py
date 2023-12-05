@@ -20,7 +20,7 @@ SPLITTED_FILE_DIR = f"data/{PROJECT}Splits"
 MAX_MODELS = 10000
 TORCHSEED = 42
 ###############################################################################
-
+torch.manual_seed(TORCHSEED)
 # INIT
 ###############################################################################
 # mode of this document c = combine, s = split, q = q-split
