@@ -10,7 +10,7 @@ import glob
 # Change constants here
 ###############################################################################
 PUSH_FACTOR = 2 ** 10
-LIMIT = (2 ** 53) * PUSH_FACTOR
+LIMIT = (2 ** 13) * PUSH_FACTOR
 
 PROJECT = "PPMI"
 # path where the new global model will be saved after combining the splits
