@@ -59,7 +59,7 @@ class Server(BaseFedarated):
             hetero_model.append(np.array(loaded_model[815:819], dtype=np.float32).reshape(4,))
             hetero_model.append(np.array(loaded_model[819:831], dtype=np.float32).reshape(4,3))
             hetero_model.append(np.array(loaded_model[831:834], dtype=np.float32).reshape(3,))
-            #print("HETERO_MODEL = ", hetero_model)
+            print("HETERO_MODEL = ", hetero_model)
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
