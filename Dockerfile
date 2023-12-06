@@ -20,7 +20,7 @@ RUN git clone https://github.com/encryptogroup/ABY.git && git clone https://gith
 
 # Compile ABY
 WORKDIR /ABY
-RUN mkdir -p build && cd build && cmake .. && make && make install
+RUN mkdir -p build && cd build && cmake .. -DABY_BUILD_EXE=On && make && make install
 
 # Adjust variables in CMakeLists.txt and build SAFELearn
 WORKDIR /SAFELearn
