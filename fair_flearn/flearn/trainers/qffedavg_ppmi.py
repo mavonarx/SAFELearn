@@ -48,16 +48,18 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            hetero_model.append(np.array(loaded_model[:240]).reshape(12, 20)) # TODO when to use (xxx,1) and when to use (xxx,)
-            hetero_model.append(np.array(loaded_model[240:260]).reshape(20,))
-            hetero_model.append(np.array(loaded_model[260:560]).reshape(20,15))
-            hetero_model.append(np.array(loaded_model[560:575]).reshape(15,))
-            hetero_model.append(np.array(loaded_model[575:755]).reshape(15,12))
-            hetero_model.append(np.array(loaded_model[755:767]).reshape(12,))
-            hetero_model.append(np.array(loaded_model[767:815]).reshape(12,4))
-            hetero_model.append(np.array(loaded_model[815:819]).reshape(4,))
-            hetero_model.append(np.array(loaded_model[819:831]).reshape(4,3))
-            hetero_model.append(np.array(loaded_model[831:834]).reshape(3,))
+            print("LOADED_MODEL = ", loaded_model)
+            hetero_model.append(np.array(loaded_model[:240], dtype=np.float32).reshape(12, 20))
+            hetero_model.append(np.array(loaded_model[240:260], dtype=np.float32).reshape(20,))
+            hetero_model.append(np.array(loaded_model[260:560], dtype=np.float32).reshape(20,15))
+            hetero_model.append(np.array(loaded_model[560:575], dtype=np.float32).reshape(15,))
+            hetero_model.append(np.array(loaded_model[575:755], dtype=np.float32).reshape(15,12))
+            hetero_model.append(np.array(loaded_model[755:767], dtype=np.float32).reshape(12,))
+            hetero_model.append(np.array(loaded_model[767:815], dtype=np.float32).reshape(12,4))
+            hetero_model.append(np.array(loaded_model[815:819], dtype=np.float32).reshape(4,))
+            hetero_model.append(np.array(loaded_model[819:831], dtype=np.float32).reshape(4,3))
+            hetero_model.append(np.array(loaded_model[831:834], dtype=np.float32).reshape(3,))
+            print("HETERO_MODEL = ", hetero_model)
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
@@ -99,6 +101,7 @@ class Server(BaseFedarated):
             files_to_delete = glob.glob(file_pattern)
             for file in files_to_delete:
                 os.remove(file)
+        os.makedirs(f"{MODEL_PATH}", exist_ok=True);
         delete_files(f"{MODEL_PATH}_Delta*")
         for client_index, c in enumerate(selected_clients):
             Deltas = []
@@ -106,8 +109,8 @@ class Server(BaseFedarated):
             # communicate the latest model
             c.set_params(self.latest_model)
             weights_before = c.get_params()
-            if (client_index == 0):
-                print(weights_before, "entire weights/bias of model") 
+            #if (client_index == 0):
+            #    print(weights_before, "entire weights/bias of model") 
             #    print(weights_before[8].shape, "shape of selected array") 
             #    print(weights_before[8], "entry of chosen array") 
             #    print(weights_before[9].shape, "shape of selected array") 
@@ -120,6 +123,7 @@ class Server(BaseFedarated):
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
             
+            #print(new_weights, "new_weights")
 
             # at this point our arrays are heterogeneous, we need them homogenous and in one arary to work with them in safelearn
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
@@ -132,8 +136,8 @@ class Server(BaseFedarated):
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
 
-        print(weights_before.shape, "entire model's shape \n") 
-        print(weights_before, "entire model \n") 
+        #print(weights_before.shape, "entire model's shape \n") 
+        #print(weights_before, "entire model \n") 
         
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
