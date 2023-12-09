@@ -61,7 +61,7 @@ class Server(BaseFedarated):
             hetero_model.append(np.array(loaded_model[831:834]).reshape(3,))
             print("HETERO_MODEL = ", hetero_model)
             self.latest_model = hetero_model
-            print(self.late)
+            print(self.latest_model)
 
         num_clients = len(self.clients)
         pk = np.ones(num_clients) * 1.0 / num_clients
@@ -136,8 +136,7 @@ class Server(BaseFedarated):
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
-
-        print(Deltas.shape, "Deltas' shape \n") 
+ 
         print(Deltas, "Deltas \n") 
         
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
