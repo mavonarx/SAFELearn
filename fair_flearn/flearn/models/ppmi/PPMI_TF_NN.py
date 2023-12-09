@@ -40,10 +40,10 @@ class Model(object):
         labels = tf.compat.v1.placeholder(tf.int64, shape=[None], name='labels')
         input_layer = tf.reshape(features, (-1,12))
         
-        dense1 = tf.compat.v1.layers.dense(inputs=input_layer, units=20,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
-        dense2 = tf.compat.v1.layers.dense(inputs=dense1, units=15,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
-        dense3 = tf.compat.v1.layers.dense(inputs=dense2, units=12,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
-        dense4 = tf.compat.v1.layers.dense(inputs=dense3, units=4,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
+        dense1 = tf.compat.v1.layers.dense(inputs=input_layer, units=20,activation=tf.nn.relu)
+        dense2 = tf.compat.v1.layers.dense(inputs=dense1, units=15,activation=tf.nn.relu)
+        dense3 = tf.compat.v1.layers.dense(inputs=dense2, units=12,activation=tf.nn.relu)
+        dense4 = tf.compat.v1.layers.dense(inputs=dense3, units=4,activation=tf.nn.relu)
         logits = tf.compat.v1.layers.dense(inputs=dense4, units=self.num_classes)
         predictions = {
             "classes": tf.argmax(input=logits, axis=1),
