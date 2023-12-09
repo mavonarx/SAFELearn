@@ -1,5 +1,5 @@
 python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
-            --learning_rate=0.01 \
+            --learning_rate=0.001 \
             --learning_rate_lambda=0.01 \
             --num_rounds=1 \
             --eval_every=1 \
