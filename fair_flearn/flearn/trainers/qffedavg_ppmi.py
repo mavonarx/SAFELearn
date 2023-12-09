@@ -136,8 +136,8 @@ class Server(BaseFedarated):
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
 
-        #print(weights_before.shape, "entire model's shape \n") 
-        #print(weights_before, "entire model \n") 
+        print(Deltas.shape, "Deltas' shape \n") 
+        print(Deltas, "Deltas \n") 
         
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
         
