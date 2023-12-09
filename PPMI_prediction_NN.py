@@ -18,7 +18,7 @@ np.set_printoptions(threshold=sys.maxsize)
 ###############################################################################
 MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
 LIPSCHITZCONSTANT = 1000  # this should be: 1 / learning_rate (safelearn cant handle numbers this largen so we use 1)
-Q_FACTOR = 1
+Q_FACTOR = 0.01
 TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 NUMBER_OF_CLIENTS =3
@@ -26,7 +26,7 @@ PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 300
+N_EPOCHS = 100
 BATCH_SIZE = 64
 ###############################################################################
 
