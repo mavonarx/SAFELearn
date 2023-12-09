@@ -1,5 +1,5 @@
 python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
-            --learning_rate=0.001 \
+            --learning_rate=0.0001 \
             --learning_rate_lambda=0.01 \
             --num_rounds=1 \
             --eval_every=1 \
@@ -8,7 +8,7 @@ python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
             --q=1 \
             --model='PPMI_TF_NN' \
             --sampling=1  \
-            --num_epochs=100 \
+            --num_epochs=200 \
             --data_partition_seed=1 \
             --log_interval=10 \
             --static_step_size=0 \
