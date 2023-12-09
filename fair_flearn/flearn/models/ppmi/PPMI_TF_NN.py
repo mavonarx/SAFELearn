@@ -20,7 +20,7 @@ class Model(object):
         # create computation graph
         self.graph = tf.Graph()
         with self.graph.as_default():
-            tf.compat.v1.set_random_seed(123 + seed)
+            tf.compat.v1.set_random_seed(1 + seed)
             self.features, self.labels, self.train_op, self.grads, self.eval_metric_ops, self.loss = self.create_model(
                 q, optimizer)
             self.saver = tf.compat.v1.train.Saver()
@@ -39,10 +39,11 @@ class Model(object):
         features = tf.compat.v1.placeholder(tf.float32, shape=[None, 12], name='features')
         labels = tf.compat.v1.placeholder(tf.int64, shape=[None], name='labels')
         input_layer = tf.reshape(features, (-1,12))
-        dense1 = tf.compat.v1.layers.dense(inputs=input_layer, units=20,activation=tf.nn.relu)
-        dense2 = tf.compat.v1.layers.dense(inputs=dense1, units=15,activation=tf.nn.relu)
-        dense3 = tf.compat.v1.layers.dense(inputs=dense2, units=12,activation=tf.nn.relu)
-        dense4 = tf.compat.v1.layers.dense(inputs=dense3, units=4,activation=tf.nn.relu)
+        
+        dense1 = tf.compat.v1.layers.dense(inputs=input_layer, units=20,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
+        dense2 = tf.compat.v1.layers.dense(inputs=dense1, units=15,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
+        dense3 = tf.compat.v1.layers.dense(inputs=dense2, units=12,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
+        dense4 = tf.compat.v1.layers.dense(inputs=dense3, units=4,activation=tf.nn.relu, bias_initializer=tf.compat.v1.random_normal_initializer())
         logits = tf.compat.v1.layers.dense(inputs=dense4, units=self.num_classes)
         predictions = {
             "classes": tf.argmax(input=logits, axis=1),
