@@ -5,7 +5,7 @@ python3  -u main.py --dataset=ppmi --optimizer=qffedavg_ppmi  \
             --eval_every=1 \
             --clients_per_round=3 \
             --batch_size=64 \
-            --q=1 \
+            --q=0.01 \
             --model='PPMI_TF_NN' \
             --sampling=1  \
             --num_epochs=100 \
