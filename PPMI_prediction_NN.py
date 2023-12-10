@@ -116,9 +116,10 @@ def eval_model(model, X_test, y_test):
         #print(y_test.flatten().numpy())
         f1 = multiclass_f1_score(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
         auroc = multiclass_auroc(y_pred, torch.reshape( y_test, (-1, )), num_classes=3).numpy()
-        print ("The accuracy is", accuracy_score(y_test, np.argmax(y_pred, axis=1)))
-        print("F1 Score:", f1)
-        print("AUROC:", auroc)
+        #print ("The accuracy is", accuracy_score(y_test, np.argmax(y_pred, axis=1)))
+        print(accuracy_score(y_test, np.argmax(y_pred, axis=1)), ",")
+        #print("F1 Score:", f1)
+        #print("AUROC:", auroc)
         
 
 
