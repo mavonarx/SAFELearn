@@ -7,8 +7,8 @@ python PPMI_prediction_NN.py 2 999  >> results.txt
 # Change params here
 ##########################################################
 # mode 2 = Q-fed-avg, mode 1 = weighted-avg, mode 0 = normal avg
-MODE=2
-ROUNDS=2
+MODE=0
+ROUNDS=50
 ##########################################################
 echo "SAFELearn" >> results.txt
 echo MODE = $MODE >> results.txt

@@ -96,7 +96,7 @@ for i in range(1, CLIENTS):
 h = torch.empty(len(summed_deltas)).fill_(summed_h)
 #print(summed_deltas, "summed deltas")
 #print(h, "h vec should all be same value")
-print(torch.div(summed_deltas, h), "update")
+#print(torch.div(summed_deltas, h), "update")
 result = torch.subtract(global_model_vec , (torch.div(summed_deltas, h)))
 result_modell = recover_model_from_vec(global_model.state_dict(), result, global_model.state_dict().keys())
 #print(result_modell)

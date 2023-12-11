@@ -10,7 +10,7 @@ import glob
 # Change constants here
 ###############################################################################
 PUSH_FACTOR = 2 ** 10
-LIMIT = (2 ** 53) * PUSH_FACTOR
+LIMIT = (2 ** 3) * PUSH_FACTOR
 
 PROJECT = "PPMI"
 # path where the new global model will be saved after combining the splits
@@ -101,7 +101,6 @@ def create_splits(global_model_path, local_model_paths, q=False):
         vec = ""
         if q:
             delta_wk_h_np = np.loadtxt(path)
-            print(delta_wk_h_np)
             delta_part = restrict_values(delta_wk_h_np[1:])
             restricted_local_vec = (np.concatenate((delta_wk_h_np[0].reshape(1,),delta_part)))
         else:
