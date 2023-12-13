@@ -1,7 +1,7 @@
 python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
             --learning_rate=0.01 \
             --learning_rate_lambda=0.01 \
-            --num_rounds=20 \
+            --num_rounds=1 \
             --eval_every=1 \
             --clients_per_round=10 \
             --batch_size=64 \
