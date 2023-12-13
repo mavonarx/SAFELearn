@@ -52,10 +52,10 @@ plt.legend()
 plt.show()
 
 
-communication_time_vec3 = [22.761, 24.143, 24.168,  23.66, 26.937] # in ms
-communication_time_vec30 = [147.749, 143.415, 143.455, 143.209, 140.5] #in ms
-communication_time_vec100 = [405.293, 405.197, 413.049, 421.13, 419.391] #in ms
-communication_time_vec200 = [822.286, 831.467, 813.454, 833.117, 822.709] #in ms
+communication_time_vec3   = [ 22.761,   24.143,   24.168,   23.66, 26.937] # in ms
+communication_time_vec30  = [147.749,  143.415,  143.455, 143.209, 140.5] #in ms
+communication_time_vec100 = [405.293,  405.197,  413.049, 421.13, 419.391] #in ms
+communication_time_vec200 = [822.286,  831.467,  813.454, 833.117, 822.709] #in ms
 communication_time_vec300 = [1205.19, 1204.32, 1199.02, 1210.4, 1205.77] #in ms
 communication_time_vec400 = [1597.89, 1590.72, 1603.01, 1594.63, 1625.38] #in ms
 

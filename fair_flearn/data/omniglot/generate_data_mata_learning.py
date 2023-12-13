@@ -75,6 +75,8 @@ def generate_dataset():
 
 def main():
 
+    os.makedirs("./data/train", exist_ok=True)
+    os.makedirs("./data/test", exist_ok=True)
     train_output = "./data/train/mytrain.json"
     test_output = "./data/test/mytest.json"
 
@@ -93,10 +95,18 @@ def main():
         test_data['users'].append(uname)
         test_data['user_data'][uname] = {'x': X_test[i], 'y': y_test[i]}
 
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif type(obj) == np.int64: 
+                return int(obj)
+            return json.JSONEncoder.default(self, obj)
+    
     with open(train_output, 'w') as outfile:
-        json.dump(train_data, outfile)
+        json.dump(train_data, outfile, cls=NumpyEncoder)
     with open(test_output, 'w') as outfile:
-        json.dump(test_data, outfile)
+        json.dump(test_data, outfile, cls=NumpyEncoder)
 
 
 if __name__ == "__main__":
