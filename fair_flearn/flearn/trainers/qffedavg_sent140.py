@@ -118,14 +118,16 @@ class Server(BaseFedarated):
                                      Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,)))
             weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[1].reshape(-1,), weights_before[2].reshape(-1,), weights_before[3].reshape(-1,), 
                                              weights_before[4].reshape(-1,), weights_before[5].reshape(-1,), weights_before[6].reshape(-1,)))
+            print("! concat done !")
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
         
             combined = np.concatenate((np.array(hs), Deltas))
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
+        print("!!! made it through qfed calc !!!")
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        
+        print("! saved global model !")
         
         # aggregate using the dynamic step-size
         #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
