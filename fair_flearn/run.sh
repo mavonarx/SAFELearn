@@ -6,7 +6,7 @@ python3  -u main.py --dataset=sent140 --optimizer=qffedavg  \
             --clients_per_round=10 \
             --batch_size=32 \
             --q=1 \
-            --model='svm' \
+            --model='stacked_lstm' \
             --sampling=1  \
             --num_epochs=10 \
             --data_partition_seed=1 \
