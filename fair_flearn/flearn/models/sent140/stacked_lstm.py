@@ -3,7 +3,6 @@ import numpy as np
 import tensorflow as tf
 from tqdm import trange
 
-from tensorflow.contrib import rnn
 
 from flearn.utils.model_utils import batch_data
 from flearn.utils.language_utils import line_to_indices, val_to_vec
@@ -60,7 +59,7 @@ class Model(object):
         embs = tf.Variable(self.emb_arr, dtype=tf.float32, trainable=False)
         x = tf.nn.embedding_lookup(embs, features)
         
-        stacked_lstm = rnn.MultiRNNCell([rnn.BasicLSTMCell(self.n_hidden) for _ in range(2)])
+        stacked_lstm = tf.compat.v1.nn.rnn_cell.MultiRNNCell([tf.compat.v1.nn.rnn_cell.BasicLSTMCell(self.n_hidden) for _ in range(2)])
         outputs, _ = tf.compat.v1.nn.dynamic_rnn(stacked_lstm, x, dtype=tf.float32)
         fc1 = tf.compat.v1.layers.dense(inputs=outputs[:,-1,:], units=30)
         pred = tf.compat.v1.layers.dense(inputs=fc1, units=self.num_classes)
