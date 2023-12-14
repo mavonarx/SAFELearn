@@ -58,27 +58,10 @@ vehicle2 = [0.000000000000000000e+00,8.715071003206595890e-01,8.3463124141090239
 8.531836921667430573e-01,8.506642235455794676e-01,8.522675217590471863e-01,8.511223087494274031e-01,8.504351809436555554e-01,8.486028401282638134e-01,8.506642235455794676e-01,8.520384791571232741e-01,8.511223087494274031e-01,8.511223087494274031e-01]
 vehicle3 = [0.000000000000000000e+00,8.770041227668345929e-01,8.506642235455794676e-01,8.660100778744846961e-01,8.589097572148419735e-01,8.634906092533211064e-01,8.600549702244617567e-01,8.630325240494731709e-01,8.632615666513971941e-01,8.586807146129179502e-01,
 8.598259276225378445e-01,8.618873110398533877e-01,8.621163536417774109e-01,8.591387998167658857e-01,8.609711406321576277e-01,8.589097572148419735e-01,8.589097572148419735e-01,8.582226294090701257e-01,8.605130554283096922e-01,8.595968850206138212e-01]
-vehicle4 = [0.000000000000000000e+00
-8.721942281264315477e-01
-8.321117727897389127e-01
-8.531836921667430573e-01
-8.453962437013284870e-01
-8.492899679340357721e-01
-8.460833715071003347e-01
-8.483737975263399012e-01
-8.499770957398076199e-01
-8.486028401282638134e-01
-8.495190105359596844e-01
-8.479157123224919657e-01
-8.479157123224919657e-01
-8.476866697205680534e-01
-8.492899679340357721e-01
-8.488318827301878366e-01
-8.481447549244159889e-01
-8.492899679340357721e-01
-8.492899679340357721e-01
-8.479157123224919657e-01]
-vehicle5 = []
+vehicle4 = [0.000000000000000000e+00,8.721942281264315477e-01,8.321117727897389127e-01,8.531836921667430573e-01,8.453962437013284870e-01,8.492899679340357721e-01,8.460833715071003347e-01,8.483737975263399012e-01,8.499770957398076199e-01,8.486028401282638134e-01,
+8.495190105359596844e-01,8.479157123224919657e-01,8.479157123224919657e-01,8.476866697205680534e-01,8.492899679340357721e-01,8.488318827301878366e-01,8.481447549244159889e-01,8.492899679340357721e-01,8.492899679340357721e-01,8.479157123224919657e-01]
+vehicle5 = [0.000000000000000000e+00,8.770041227668345929e-01,8.332569857993586959e-01,8.573064590013742547e-01,8.451672010994044637e-01,8.504351809436555554e-01,8.449381584974805515e-01,8.483737975263399012e-01,8.465414567109482702e-01,8.486028401282638134e-01,
+8.481447549244159889e-01,8.472285845167201179e-01,8.467704993128721824e-01,8.469995419147962057e-01,8.469995419147962057e-01,8.497480531378835966e-01,8.492899679340357721e-01,8.481447549244159889e-01,8.495190105359596844e-01,8.479157123224919657e-01]
 x2 = range(1,21)
 
 
@@ -87,21 +70,23 @@ fed_mean = np.mean( np.array([ fedavg_1, fedavg_2, fedavg_3,fedavg_4,fedavg_5 ])
 q_std = np.std(np.array([ q0_1, q0_2, q0_3,q0_4,q0_5 ]), axis=0 )
 fed_std = np.std( np.array([ fedavg_1, fedavg_2, fedavg_3,fedavg_4,fedavg_5 ]), axis=0 )
 
-vehicle_mean = np.mean([vehicle1,vehicle2,vehicle3,vehicle4,vehicle5])
-vehicle_std = np.std([vehicle1,vehicle2,vehicle3,vehicle4,vehicle5])
+vehicle_mean = np.mean(np.array([vehicle1,vehicle2,vehicle3,vehicle4,vehicle5]), axis=0 )
+vehicle_std = np.std(np.array([vehicle1,vehicle2,vehicle3,vehicle4,vehicle5]), axis=0 )
 
 
 
 fig1 = plt.figure()
 plt.ylabel("accuracy")
 plt.xlabel("steps")
-#plt.plot(x, q0_1, 'r', label = "run 1-5 qfed", linestyle = "dotted")
-#plt.plot(x, q0_2, 'r',  linestyle = "dotted")
-#plt.plot(x, q0_3, 'r',  linestyle = "dotted")
-#plt.plot(x, q0_4, 'r',  linestyle = "dotted")
-#plt.plot(x, q0_5, 'r',  linestyle = "dotted")
-#plt.plot(x, q_mean, 'b', label = "q_mean")
-#plt.fill_between(x, q_mean + q_std, q_mean - q_std,alpha=.3)
+plt.title("Q-FedAvg and FedAvg")
+plt.plot(x1, q0_1, 'r', label = "run 1-5 qfed", linestyle = "dotted")
+plt.plot(x1, q0_2, 'r',  linestyle = "dotted")
+plt.plot(x1, q0_3, 'r',  linestyle = "dotted")
+plt.plot(x1, q0_4, 'r',  linestyle = "dotted")
+plt.plot(x1, q0_5, 'r',  linestyle = "dotted")
+plt.plot(x1, q_mean, 'b', label = "q_mean")
+plt.fill_between(x1, q_mean + q_std, q_mean - q_std,alpha=.3)
+
 
 plt.plot(x1, fedavg_1, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
 plt.plot(x1, fedavg_2, 'g',  linestyle = "dotted")
@@ -116,11 +101,15 @@ plt.legend()
 
 
 fig2 = plt.figure()
+plt.title("vehicle (SVM)")
+plt.ylabel("accuracy")
+plt.xlabel("steps")
 plt.plot(x2, vehicle1, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
-plt.plot(x2, vehicle2, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
-plt.plot(x2, vehicle3, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
-plt.plot(x2, vehicle4, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
-plt.plot(x2, vehicle5, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
+plt.plot(x2, vehicle2, 'g',  linestyle = "dotted")
+plt.plot(x2, vehicle3, 'g',  linestyle = "dotted")
+plt.plot(x2, vehicle4, 'g',  linestyle = "dotted")
+plt.plot(x2, vehicle5, 'g',  linestyle = "dotted")
 plt.plot(x2, vehicle_mean, 'purple', label = "fed_mean")
 plt.fill_between(x2, vehicle_mean + vehicle_std, vehicle_mean - vehicle_std,alpha=.3)
+plt.legend()
 plt.show()
