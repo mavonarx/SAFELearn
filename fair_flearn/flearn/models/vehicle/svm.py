@@ -16,7 +16,7 @@ class Model(object):
         # create computation graph        
         self.graph = tf.Graph()
         with self.graph.as_default():
-            tf.compat.v1.set_random_seed(133+seed)
+            tf.compat.v1.set_random_seed(13+seed)
             self.features, self.labels, self.train_op, self.grads, self.eval_metric_ops, self.loss, self.predictions = self.create_model(q, optimizer)
             self.saver = tf.compat.v1.train.Saver()
         self.sess = tf.compat.v1.Session(graph=self.graph)
