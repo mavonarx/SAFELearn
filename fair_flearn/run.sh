@@ -1,7 +1,7 @@
 python3  -u main.py --dataset=sent140 --optimizer=qffedavg  \
             --learning_rate=0.03 \
             --learning_rate_lambda=0.01 \
-            --num_rounds=1 \
+            --num_rounds=600 \
             --eval_every=1 \
             --clients_per_round=10 \
             --batch_size=32 \
