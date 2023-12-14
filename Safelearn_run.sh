@@ -22,7 +22,7 @@ fi
 
 for i in $(seq 1 ${ROUNDS});
 do
-    echo $i >> results.txt
+    #echo $i >> results.txt
     cd fair_flearn
     ./run.sh 
     cd ..
@@ -33,7 +33,7 @@ do
     cd ..
     echo c | python Split_Aggregate_TF.py
 
-    cat fair_flearn/vehicle_stuff_to_cat/test.csv >> results.txt
-    cat fair_flearn/vehicle_stuff_to_cat/train.csv >> results.txt
+    #cat fair_flearn/vehicle_stuff_to_cat/test.csv >> results.txt
+    #cat fair_flearn/vehicle_stuff_to_cat/train.csv >> results.txt
     cat fair_flearn/vehicle_stuff_to_cat/val.csv >> results.txt
 done
