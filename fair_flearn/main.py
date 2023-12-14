@@ -7,7 +7,7 @@ import tensorflow as tf
 from flearn.utils.model_utils import read_data
 
 # GLOBAL PARAMETERS
-OPTIMIZERS = ['qffedsgd', 'qffedavg', 'afl', 'maml', 'qffedavg_ppmi']
+OPTIMIZERS = ['qffedsgd', 'qffedavg', 'afl', 'maml', 'qffedavg_ppmi', 'qffedavg_sent140']
 DATASETS = [ 'synthetic', 'vehicle', 'sent140', 'shakespeare',
 'synthetic_iid', 'synthetic_hybrid', 
 'fmnist', 'adult', 'omniglot', 'ppmi']   # fmnist: fashion mnist used in the AFL paper
