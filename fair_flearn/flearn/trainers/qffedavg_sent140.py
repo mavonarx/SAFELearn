@@ -92,6 +92,12 @@ class Server(BaseFedarated):
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
             print(Deltas[0][0].shape)
+            print(Deltas[0][1].shape)
+            print(Deltas[0][2].shape)
+            print(Deltas[0][3].shape)
+            print(Deltas[0][4].shape)
+            print(Deltas[0][5].shape)
+            print(Deltas[0][6].shape)
             
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,)))
             weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
