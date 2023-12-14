@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libboost-all-dev \
     curl \
-    neovim
+    neovim \
+    wget \
+    unzip
 
 WORKDIR /
 # Download ABY and SAFELearn
