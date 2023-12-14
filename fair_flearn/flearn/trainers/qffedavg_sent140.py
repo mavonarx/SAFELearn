@@ -33,7 +33,7 @@ from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch
 #TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 #NUMBER_OF_CLIENTS = 3
-PROJECT = "sent140"
+PROJECT = "PPMI"
 #INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"../model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"

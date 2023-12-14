@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm results.txt
-rm model/sent140/GlobalModel.txt
+rm model/PPMI/GlobalModel.txt
 
 
 # Change params here
