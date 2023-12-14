@@ -9,6 +9,21 @@ from flearn.utils.tf_utils import process_grad, cosine_sim, softmax, norm_grad
 from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch
 
 
+
+###############################################################################
+#
+# Sent140 stacked_lstm model dimensions
+#(400, 400)
+#(400,)
+#(200, 400)
+#(400,)
+#(100, 30)
+#(30,)
+#(30, 2)
+#
+###############################################################################
+
+
 # Change constants here
 ###############################################################################
 #MODE = int(sys.argv[1])  # 0 is training mode, 1 is eval mode, 2 is print params mode
@@ -91,15 +106,16 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
-            print(Deltas[0][0].shape)
-            print(Deltas[0][1].shape)
-            print(Deltas[0][2].shape)
-            print(Deltas[0][3].shape)
-            print(Deltas[0][4].shape)
-            print(Deltas[0][5].shape)
-            print(Deltas[0][6].shape)
+            print(weights_before)
+            print(weights_before[0].shape)
+            print(weights_before[0][1].shape)
+            print(weights_before[0][2].shape)
+            print(weights_before[0][3].shape)
+            print(weights_before[0][4].shape)
+            print(weights_before[0][5].shape)
+            print(weights_before[0][6].shape)
             
-            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,)))
+            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,)))
             weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
