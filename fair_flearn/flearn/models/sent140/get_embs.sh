@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+mkdir -p sent140
 cd sent140
 
 if [ ! -f 'glove.6B.300d.txt' ]; then
