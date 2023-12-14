@@ -49,6 +49,15 @@ fedavg_5 = [0.4801874733702599 ,0.46697912228376653 ,0.47635279079676185 ,0.5556
 0.7371112057946314 ,0.7392415850021303 ,0.7213463996591394 ,0.7354069024286323 ,0.7277375372816361 ,0.7400937366851299 ,0.7375372816361312 ,0.735832978270132 ,0.7383894333191308 ,
 0.7337025990626331 ,0.7375372816361312 ,0.7213463996591394 ,0.7430762675756285 ,0.7456327226246272 ,0.7417980400511291 ,0.7417980400511291 ,0.7473370259906263 ,0.7426501917341287 ,
 0.7550063911376225 ,0.7537281636131231 ,0.7494674051981253 ,0.7626757562846187 ,0.757988922028121 ,0.7567106945036216 ]
+x1 = range(1, 51)
+
+
+vehicle1 = []
+vehicle1 = []
+vehicle1 = []
+vehicle1 = []
+vehicle1 = []
+
 
 
 q_mean = np.mean( np.array([ q0_1, q0_2, q0_3,q0_4,q0_5 ]), axis=0 )
@@ -57,7 +66,9 @@ q_std = np.std(np.array([ q0_1, q0_2, q0_3,q0_4,q0_5 ]), axis=0 )
 fed_std = np.std( np.array([ fedavg_1, fedavg_2, fedavg_3,fedavg_4,fedavg_5 ]), axis=0 )
 
 
-x = range(1, 51)
+
+
+
 fig1 = plt.figure()
 plt.ylabel("accuracy")
 plt.xlabel("steps")
@@ -69,13 +80,18 @@ plt.xlabel("steps")
 #plt.plot(x, q_mean, 'b', label = "q_mean")
 #plt.fill_between(x, q_mean + q_std, q_mean - q_std,alpha=.3)
 
-plt.plot(x, fedavg_1, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
-plt.plot(x, fedavg_2, 'g',  linestyle = "dotted")
-plt.plot(x, fedavg_3, 'g',  linestyle = "dotted")
-plt.plot(x, fedavg_4, 'g',  linestyle = "dotted")
-plt.plot(x, fedavg_5, 'g',  linestyle = "dotted")
-plt.plot(x, fed_mean, 'purple', label = "fed_mean")
-plt.fill_between(x, fed_mean + fed_std, fed_mean - fed_std,alpha=.3)
+plt.plot(x1, fedavg_1, 'g', label = "run 1-5 fedavg", linestyle = "dotted")
+plt.plot(x1, fedavg_2, 'g',  linestyle = "dotted")
+plt.plot(x1, fedavg_3, 'g',  linestyle = "dotted")
+plt.plot(x1, fedavg_4, 'g',  linestyle = "dotted")
+plt.plot(x1, fedavg_5, 'g',  linestyle = "dotted")
+plt.plot(x1, fed_mean, 'purple', label = "fed_mean")
+plt.fill_between(x1, fed_mean + fed_std, fed_mean - fed_std,alpha=.3)
 plt.legend()
+
+
+
+
+fig2 = plt.figure()
 
 plt.show()
