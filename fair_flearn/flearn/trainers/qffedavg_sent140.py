@@ -17,8 +17,8 @@ from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch
 #TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
 #NUMBER_OF_CLIENTS = 3
-PROJECT = "PPMI"
-INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
+PROJECT = "sent140"
+#INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"../model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
 #N_EPOCHS = 5
@@ -91,6 +91,8 @@ class Server(BaseFedarated):
             grads = [(u - v) * 1.0 / self.learning_rate for u, v in zip(weights_before, new_weights)]
             
             Deltas.append([np.float_power(loss+1e-10, self.q) * grad for grad in grads])
+            print(Deltas)
+            
             Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,)))
             weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
             # estimation of the local Lipchitz constant
@@ -100,7 +102,7 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        print(Deltas)
+        
         
         # aggregate using the dynamic step-size
         #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
