@@ -9,7 +9,7 @@ python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
             --model='svm' \
             --sampling=1  \
             --num_epochs=10 \
-            --data_partition_seed=10 \
+            --data_partition_seed=1 \
             --log_interval=10 \
             --static_step_size=0 \
             --track_individual_accuracy=0 #\
