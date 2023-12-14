@@ -100,7 +100,7 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        print(hs)
+        print(Deltas)
         
         # aggregate using the dynamic step-size
         #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
