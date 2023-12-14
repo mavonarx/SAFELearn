@@ -16,13 +16,13 @@ from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch
 #Q_FACTOR = 1 #deprecated
 #TORCHSEED = int(sys.argv[2])
 DEFAULT_DEVICE = "cpu"
-NUMBER_OF_CLIENTS = 3
+#NUMBER_OF_CLIENTS = 3
 PROJECT = "PPMI"
 INPUT_DATA_PATH = f"input_data/{PROJECT}/PPMI_cleaned_altered.csv"
 MODEL_PATH= f"../model/{PROJECT}/"
 GLOBAL_MODEL_PATH = f"{MODEL_PATH}/GlobalModel.txt"
-N_EPOCHS = 5
-BATCH_SIZE = 64
+#N_EPOCHS = 5
+#BATCH_SIZE = 64
 ###############################################################################
 
 
@@ -100,7 +100,7 @@ class Server(BaseFedarated):
             np.savetxt(f"{MODEL_PATH}Delta_{client_index}.txt", combined, fmt='%.8f')
             
         np.savetxt(f"{GLOBAL_MODEL_PATH}", weights_before, fmt='%.8f')
-        
+        print(hs)
         
         # aggregate using the dynamic step-size
         #self.latest_model = self.aggregate2(weights_before, Deltas, hs)
