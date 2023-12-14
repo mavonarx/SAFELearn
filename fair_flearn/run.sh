@@ -5,7 +5,7 @@ python3  -u main.py --dataset=vehicle --optimizer=qffedavg  \
             --eval_every=1 \
             --clients_per_round=10 \
             --batch_size=64 \
-            --q=0 \
+            --q=1 \
             --model='svm' \
             --sampling=1  \
             --num_epochs=10 \
