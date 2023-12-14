@@ -20,6 +20,7 @@ from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch
 #(100, 30)
 #(30,)
 #(30, 2)
+#(2,)
 #
 ###############################################################################
 
@@ -53,8 +54,14 @@ class Server(BaseFedarated):
         if os.path.exists(GLOBAL_MODEL_PATH):
             hetero_model = []
             loaded_model = np.loadtxt(GLOBAL_MODEL_PATH, dtype=np.float64)
-            hetero_model.append(np.array(loaded_model[:100]).reshape(100, 1))
-            hetero_model.append(np.array(loaded_model[100]).reshape(1,))
+            hetero_model.append(np.array(loaded_model[:160000]).reshape(400, 400))
+            hetero_model.append(np.array(loaded_model[160000:160400]).reshape(400, ))
+            hetero_model.append(np.array(loaded_model[160400:240400]).reshape(200, 400))
+            hetero_model.append(np.array(loaded_model[240400:240800]).reshape(400, ))
+            hetero_model.append(np.array(loaded_model[240800:243800]).reshape(100, 30))
+            hetero_model.append(np.array(loaded_model[243800:243830]).reshape(30, ))
+            hetero_model.append(np.array(loaded_model[243830:243890]).reshape(30, 2))
+            hetero_model.append(np.array(loaded_model[243890:243892]).reshape(2, ))
             self.latest_model = hetero_model
 
         num_clients = len(self.clients)
@@ -115,8 +122,10 @@ class Server(BaseFedarated):
             print(weights_before[5].shape)
             print(weights_before[6].shape)
             
-            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,)))
-            weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[0][1].reshape(-1,)))
+            Deltas = np.concatenate((Deltas[0][0].reshape(-1,), Deltas[0][1].reshape(-1,), Deltas[0][2].reshape(-1,), Deltas[0][3].reshape(-1,), Deltas[0][4].reshape(-1,), 
+                                     Deltas[0][5].reshape(-1,), Deltas[0][6].reshape(-1,)))
+            weights_before = np.concatenate((weights_before[0].reshape(-1,), weights_before[1].reshape(-1,), weights_before[2].reshape(-1,), weights_before[3].reshape(-1,), 
+                                             weights_before[4].reshape(-1,), weights_before[5].reshape(-1,), weights_before[6].reshape(-1,)))
             # estimation of the local Lipchitz constant
             hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
         
